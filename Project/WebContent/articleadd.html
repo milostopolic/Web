@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Add article</title>
+	<script src="JS/jquery-3.3.1.min.js"></script>
+    <script src="JS/bootstrap.min.js"></script>       
+	<script src="JS/articleadd.js"></script>
+    <!-- Bootstrap core CSS -->
+    <link href="CSS/bootstrap.min.css" rel="stylesheet">
+    <!-- link href="CSS/index.css" rel="stylesheet"-->
+</head>
+<body>
+	<form id="articleaddForm">
+		<table>			
+			<tr>
+				<td>Name:</td>
+				<td><input type="text" id="name"/></td>
+			</tr>
+			<tr>
+				<td>Type:</td>
+				<td>
+					<select name="type">
+						<option value="0">Food</option>
+						<option value="1">Drink</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td>Unit price:</td>
+				<td><input type="text" id="price"/></td>
+			</tr>
+			<tr>
+				<td>Description:</td>
+				<td><input type="text" id="description"/></td>
+			</tr>
+			<tr>
+				<td>Quantity:</td>
+				<td><input type="text" id="quantity"/></td>
+			</tr>						
+		</table>
+		<input type="submit" value="Add"/>
+	</form>	
+	<p id="paragraph"></p>
+</body>
+</html>

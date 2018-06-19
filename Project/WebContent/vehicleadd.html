@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Add vehicle</title>
+	<script src="JS/jquery-3.3.1.min.js"></script>
+    <script src="JS/bootstrap.min.js"></script>       
+	<script src="JS/vehicleadd.js"></script>
+    <!-- Bootstrap core CSS -->
+    <link href="CSS/bootstrap.min.css" rel="stylesheet">
+    <!-- link href="CSS/index.css" rel="stylesheet"-->
+</head>
+<body>
+	<form id="vehicleaddForm">
+		<table>
+			<tr>
+				<td>Maker:</td>
+				<td><input type="text" id="maker"/></td>
+			</tr>
+			<tr>
+				<td>Model:</td>
+				<td><input type="text" id="model"/></td>
+			</tr>
+			<tr>
+				<td>Type:</td>
+				<td>
+					<select name="type">
+						<option value="0">Bicycle</option>
+						<option value="1">Moped</option>
+						<option value="2">Car</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td>Registration:</td>
+				<td><input type="text" id="registration"/></td>
+			</tr>
+			<tr>
+				<td>Note:</td>
+				<td><input type="text" id="note"/></td>
+			</tr>	
+		</table>
+		<input type="submit" value="Add"/>
+	</form>	
+	<p id="paragraph"></p>
+</body>
+</html>
