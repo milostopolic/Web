@@ -7,12 +7,14 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import models.User;
+import models.UserRole;
 import services.UserService;
 
 @Path("/users")
@@ -74,6 +76,19 @@ public class UserResource {
 		if(tempUser == null) {
 			return Response.status(Response.Status.BAD_REQUEST).build();
 		}
+		return Response.ok(tempUser, MediaType.APPLICATION_JSON).build();
+	}
+	
+	@GET
+	@Path("/changerole/{role}/{username}")
+	public Response changeRole(@Context HttpServletRequest request, @PathParam("role") UserRole ur, @PathParam("username") String username) {
+		User admin = (User) request.getSession().getAttribute("loggedUser");
+		System.out.println(admin.getRole());
+		User tempUser = userService.changeRole(admin, username, ur);
+		if(tempUser == null) {
+			return Response.status(Response.Status.BAD_REQUEST).build();
+		}
+		request.getSession().setAttribute("loggedUser", admin);
 		return Response.ok(tempUser, MediaType.APPLICATION_JSON).build();
 	}
 	

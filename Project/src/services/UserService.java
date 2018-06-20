@@ -54,6 +54,15 @@ public class UserService {
 		return null;
 	}
 	
+	public User changeRole(User admin, String username, UserRole ur) {
+		if(admin.getRole() != UserRole.ADMIN) {
+			return null;
+		}
+		users.get(username).setRole(ur);
+		DatabaseClass.saveData(DatabaseClass.myRepositoryPath);
+		return users.get(username);
+	}
+	
 	public  List<User> getAllUsers(){
 		return new ArrayList<User>(users.values()); 
 	}

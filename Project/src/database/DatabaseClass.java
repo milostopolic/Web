@@ -96,19 +96,22 @@ public class DatabaseClass {
 
 			    String path = new File("src/img/").getAbsolutePath();
 			    System.out.println(path);
-			    Repository.getInstance().getUsers().put("admin", new User("admin", "admin", "admin", "admin", "admin", "admin", ""));
-				Repository.getInstance().getUsers().get("admin").setRole(UserRole.ADMIN);
-				Repository.getInstance().getUsers().get("admin").setDate(new SimpleDateFormat("dd-MM-yyyy").format(new Date()));
-				DatabaseClass.saveData(myRepositoryPath);
+			    if(!Repository.getInstance().getUsers().containsKey("admin")) {
+			    	Repository.getInstance().getUsers().put("admin", new User("admin", "admin", "admin", "admin", "admin", "admin", ""));
+					Repository.getInstance().getUsers().get("admin").setRole(UserRole.ADMIN);
+					Repository.getInstance().getUsers().get("admin").setDate(new SimpleDateFormat("dd-MM-yyyy").format(new Date()));
+					DatabaseClass.saveData(myRepositoryPath);
+			    }			    
 				
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-				Repository.getInstance().setUsers(new HashMap<String,User>());
-				Repository.getInstance().getUsers().put("admin", new User("admin", "admin", "admin", "admin", "admin", "admin", ""));
-				Repository.getInstance().getUsers().get("admin").setRole(UserRole.ADMIN);
-				Repository.getInstance().getUsers().get("admin").setDate(new SimpleDateFormat("dd-MM-yyyy").format(new Date()));
-				DatabaseClass.saveData(myRepositoryPath);
+				if(!Repository.getInstance().getUsers().containsKey("admin")) {
+			    	Repository.getInstance().getUsers().put("admin", new User("admin", "admin", "admin", "admin", "admin", "admin", ""));
+					Repository.getInstance().getUsers().get("admin").setRole(UserRole.ADMIN);
+					Repository.getInstance().getUsers().get("admin").setDate(new SimpleDateFormat("dd-MM-yyyy").format(new Date()));
+					DatabaseClass.saveData(myRepositoryPath);
+			    }
 			}
 		}
 		return Repository.getInstance().getUsers();
