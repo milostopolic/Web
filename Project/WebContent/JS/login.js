@@ -43,15 +43,19 @@ function loadNavbar() {
 				        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 				          Hello, `+ data.username +`
 				        </a>
-				        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-				          <a class="dropdown-item" href="#">User page</a>				          
+				        <div id="dropID" class="dropdown-menu" aria-labelledby="navbarDropdown">
+				          	<a class="dropdown-item" href="#" id="signOut">Sign out</a>        
 				          <div class="dropdown-divider"></div>
-				          <a class="dropdown-item" href="#" id="signOut">Sign out</a>
+				          
 				        </div>
 				      </li>			      
 				    </ul>`);
 			if(data.role == 'ADMIN'){
-				$("#listaID").append(`<li class="nav-item"><button class="btn btn-outline-success my-2 my-sm-0" onClick="usersClick()">Users</button></li>`)
+				//$("#listaID").append(`<li class="nav-item"><button class="btn btn-outline-success my-2 my-sm-0" onClick="usersClick()">Users</button></li>`)
+				$("#dropID").append(`<a style="cursor:pointer" class="dropdown-item" onClick="usersClick()">Users</a>`);
+				$("#dropID").append(`<a style="cursor:pointer" class="dropdown-item" onClick="articlesClick()">Articles</a>`);
+			} else {
+				$("#dropID").append(`<a class="dropdown-item" href="#">User page</a>`);
 			}
 		},
 		error : function(XMLHttpRequest, textStatus, errorThrown) {
@@ -65,7 +69,7 @@ function loadNavbar() {
       <input class="form-control mr-sm-2" type="text" placeholder="Username" aria-label="Username" id="username">
       <input class="form-control mr-sm-2" type="password" placeholder="Password" aria-label="Password" id="password">
       <input class="btn btn-outline-success my-2 my-sm-0" type="submit" value="Log in"></input>
-    </form>`)
+    </form>`);
 		}
 	});
 }
@@ -85,4 +89,7 @@ $(document).on('click', '#signOut', function(){
 
 function usersClick() {
 	window.location.href="adminusers.html";
+}
+function articlesClick() {
+	window.location.href="adminarticles.html";
 }

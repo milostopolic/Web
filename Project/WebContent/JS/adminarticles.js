@@ -1,4 +1,4 @@
-var users_url = "../Project/webapi/users"
+var articles_url = "../Project/webapi/articles"
 var loggeduser_url = "../Project/webapi/users/loggeduser"
 var logout_url = "../Project/webapi/users/logout"
 
@@ -65,24 +65,26 @@ function articlesClick() {
 	window.location.href="adminarticles.html";
 }
 
-function loadUsers() {
+function loadArticles() {
 	$.ajax({
 		type : 'GET',
-		url : users_url,
+		url : articles_url,
     contentType : 'application/json',
     	success: function(data){
-    		$("usersTableID").empty();    		
+    		$("#articlesTableID").empty();    		
     		for(let i = 0; i < data.length; i++){    			
-    			$("#usersTableID").append(`<tr><th>` + data[i].username + `</th>
-    			<td>`+ data[i].name +`</td>
-    			<td>`+ data[i].surname +`</td>
-    			<td><select id="`+data[i].username+`" class="form-control selekcija"><option value="CUSTOMER">CUSTOMER</option>
-    			<option value="DELIVERY">DELIVERY</option>
-    			<option value="ADMIN">ADMIN</option></select></td></tr>`);
-    			$('#'+data[i].username+' option:contains('+data[i].role+')').prop('selected',true);
-    			if(data[i].role == 'ADMIN') {    				
-    				$('#' +data[i].username).attr('disabled', 'disabled');
-    			}
+    			$("#articlesTableID").append(`<tr><th>` + data[i].name + `</th>
+    			<td>`+ data[i].price +`</td>
+    			<td>`+ data[i].description +`</td>
+    			<td>`+ data[i].quantity +`</td>
+    			<td>` + data[i].type + `</td>
+    			<td>
+    <img class="editovanje" id="`+ data[i].name +`" style="margin-left:5px; cursor:pointer" height="24" witdh="24" src="images/edit.png" alt="appropriate alternative text goes here">
+    				</td>
+    			<td>
+    <img class="brisanje" id="` + data[i].name + `" style="margin-left:5px; cursor:pointer" height="24" witdh="24" src="images/delete.png" alt="appropriate alternative text goes here">
+    			</td></tr>`);
+    			//$('#'+data[i].name+' option:contains('+data[i].type+')').prop('selected',true);    			
     		}
     	},     	
     	error: function(){
@@ -90,7 +92,7 @@ function loadUsers() {
     	}});
 }
 
-$(document).on('change', '.selekcija', function(){
+/*$(document).on('change', '.selekcija', function(){
 	var id = ($(this).attr('id'));
 	var selected = $(this).val();
 	$.ajax({
@@ -101,4 +103,27 @@ $(document).on('change', '.selekcija', function(){
 		error:function() {}
 	})
 	
+});*/
+
+/*$(document).on('click', '.dodavanje', function() {	
+	window.location.href="articleedit.html";
+});*/
+
+$(document).on('click', '.editovanje', function() {
+	var id = ($(this).attr('id'));
+	sessionStorage.setItem('editingArticle', id);
+	window.location.href="articleedit.html";
+});
+
+$(document).on('click', '.brisanje', function() {
+	var id = ($(this).attr('id'));	
+	$.ajax({
+		type: 'DELETE',
+		url : "../Project/webapi/articles/"+id,
+		contentType : 'application/json',
+		success: function() {
+			loadArticles();
+		},
+		error:function() {}
+	})
 });

@@ -24,9 +24,18 @@ public class UserResource {
 	
 	private UserService userService = new UserService();
 	
-	@POST
+	/*@POST
 	public User addUser(User user){
 		return userService.addUser(user);
+	}*/
+	
+	@POST
+	public Response addUser(User user){
+		User tempUser  = userService.addUser(user);
+		if(tempUser == null) {
+			return Response.status(Response.Status.BAD_REQUEST).build(); 
+		}
+		return Response.ok(tempUser, MediaType.APPLICATION_JSON).build();
 	}
 	
 	@POST

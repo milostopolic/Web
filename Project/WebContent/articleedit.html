@@ -2,45 +2,127 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Edit article</title>
-	<script src="JS/jquery-3.3.1.min.js"></script>
-    <script src="JS/bootstrap.min.js"></script>       
-	<script src="JS/articleedit.js"></script>
+<title>Main page</title>
+<script src="JS/jquery-3.3.1.min.js"></script>
+    <script src="JS/bootstrap.min.js"></script>
+    <script src="JS/articleedit.js"></script>       
+	<!-- script src="JS/useredit.js"></script-->
     <!-- Bootstrap core CSS -->
     <link href="CSS/bootstrap.min.css" rel="stylesheet">
     <!-- link href="CSS/index.css" rel="stylesheet"-->
 </head>
-<body onLoad="loadArticle()">
-	<form id="articleeditForm">
-		<table>
+<body onLoad="loadNavbar();loadArticle()">
+<nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <a class="navbar-brand" href="#">Navbar</a>
+
+  <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+    <!-- ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+      <li class="nav-item active">
+        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="register.html">Register</a>
+      </li>
+      <li class="nav-item">
+        <form class="form-inline my-2 my-lg-0">
+	      <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">	      
+	      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+	    </form>
+      </li>
+    </ul>
+    <form class="form-inline my-2 my-lg-0" id="loginForm">
+      <input class="form-control mr-sm-2" type="text" placeholder="Username" aria-label="Username" id="username">
+      <input class="form-control mr-sm-2" type="password" placeholder="Password" aria-label="Password" id="password">
+      <input class="btn btn-outline-success my-2 my-sm-0" type="submit" value="Log in"></input>
+    </form-->
+  </div>
+</nav>
+<form id="articleeditForm">
+<!-- table class="table">
+  <!-- thead class="thead-light">
+    <tr>
+      <th scope="col">Username</th>
+      <th scope="col">Name</th>
+      <th scope="col">Surname</th>
+      <th scope="col">Role</th>
+    </tr>
+  </thead>
+  <tbody id="usersTableID">
+    <tr>
+				<td>Username:</td>
+				<td><input type="text" id="username2"/></td>
+			</tr>
+			<tr>
+				<td>Password:</td>
+				<td><input type="password" id="password2"/></td>
+			</tr>
 			<tr>
 				<td>Name:</td>
-				<td><input type="text" id="name" readonly/></td>
+				<td><input type="text" id="name"/></td>
 			</tr>
 			<tr>
-				<td>Type:</td>
-				<td>
-					<select name="type">
-						<option value="0">Food</option>
-						<option value="1">Drink</option>
-					</select>
+				<td>Surname:</td>
+				<td><input type="text" id="surname"/></td>
+			</tr>
+			<tr>
+				<td>Contact:</td>
+				<td><input type="text" id="contact"/></td>
+			</tr>
+			<tr>
+				<td>Email address:</td>
+				<td><input type="text" id="email"/></td>
+			</tr>
+			<tr>
+				<td align="center">
+					<button class="btn primary" type="submit">Register</button>
 				</td>
 			</tr>
-			<tr>
-				<td>Unit price:</td>
-				<td><input type="text" id="price"/></td>
-			</tr>
-			<tr>
-				<td>Description:</td>
-				<td><input type="text" id="description"/></td>
-			</tr>
-			<tr>
-				<td>Quantity:</td>
-				<td><input type="text" id="quantity"/></td>
-			</tr>			
-		</table>
-		<input type="submit" value="Save"/>
-	</form>	
-	<p id="paragraph"></p>
+  </tbody>
+</table-->
+<div style="margin-top:10px" class="container">
+<div class="form-group row">
+  <label for="example-text-input" class="col-2 col-form-label">Name</label>
+  <div class="col-10">
+    <input class="form-control" type="text" name="name" id="name">
+  </div>
+</div>
+<div class="form-group row">
+  <label for="example-text-input" class="col-2 col-form-label">Price</label>
+  <div class="col-10">
+    <input class="form-control" type="number" name="price" id="price">
+  </div>
+</div>
+<div class="form-group row">
+  <label for="example-text-input" class="col-2 col-form-label">Description</label>
+  <div class="col-10">
+    <input class="form-control" type="text" name="description" id="description">
+  </div>
+</div>
+<div class="form-group row">
+  <label for="example-text-input" class="col-2 col-form-label">Quantity</label>
+  <div class="col-10">
+    <input class="form-control" type="number" name="quantity" id="quantity">
+  </div>
+</div>
+<div class="form-group row">
+  <label for="example-text-input" class="col-2 col-form-label">Type</label>
+  <div class="col-10">
+    <select id="type" name="type" class="form-control">
+    	<option value="FOOD">FOOD</option>
+    	<option value="DRINK">DRINK</option>
+    </select>
+  </div>
+</div>
+<div class="form-group row">
+  <label for="example-text-input" class="col-2 col-form-label"></label>
+  <div class="col-10">
+   <button class="btn primary" type="submit">Edit</button>
+  </div>
+</div>
+</div>
+</form>	
 </body>
 </html>

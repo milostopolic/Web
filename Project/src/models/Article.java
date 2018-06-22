@@ -14,6 +14,7 @@ public class Article implements Serializable {
 	private String description;
 	private String quantity;
 	private ArticleType type;
+	private boolean deleted;
 	
 	public Article(String name, String price, String description, String quantity) {
 		super();
@@ -65,6 +66,14 @@ public class Article implements Serializable {
 
 	public void setType(ArticleType type) {
 		this.type = type;
+	}
+
+	public boolean isDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
 	}
 	
 	

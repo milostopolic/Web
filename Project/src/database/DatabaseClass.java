@@ -122,6 +122,11 @@ public class DatabaseClass {
 			try {
 				Repository.getInstance().setArticles(new HashMap<String,Article>());
 				loadData(myRepositoryPath);
+				if(Repository.getInstance().getArticles() == null) {
+					System.out.println("DOBRO");
+					Repository.getInstance().setArticles(new HashMap<String,Article>());
+				}
+					
 				String basePath = new File("").getAbsolutePath();
 			    System.out.println(basePath);
 

@@ -17,12 +17,19 @@ public class UserService {
 	
 	public User addUser(User user){
 		if(user!=null){
-			user.setRole(UserRole.CUSTOMER);
-			user.setDate(new SimpleDateFormat("dd-MM-yyyy").format(new Date()));			
-			Repository.getInstance().getUsers().put(user.getUsername(), user);
-			DatabaseClass.saveData(DatabaseClass.myRepositoryPath);
+			if(!users.containsKey(user.getUsername())) {
+				System.out.println("usao u if");
+				user.setRole(UserRole.CUSTOMER);
+				user.setDate(new SimpleDateFormat("dd-MM-yyyy").format(new Date()));			
+				Repository.getInstance().getUsers().put(user.getUsername(), user);
+				DatabaseClass.saveData(DatabaseClass.myRepositoryPath);
+				
+				return user;
+			}
+			System.out.println("zauzeto");
 		}
-		return user;
+		System.out.println("null je");
+		return null;
 	}
 	
 	public User loginUser(User user) {

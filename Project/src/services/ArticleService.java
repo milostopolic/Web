@@ -1,11 +1,12 @@
 package services;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import database.DatabaseClass;
 import models.Article;
 import models.Repository;
-import models.User;
 
 public class ArticleService {
 	
@@ -13,11 +14,15 @@ public class ArticleService {
 	
 	public Article addArticle(Article article) {
 		if(article != null) {
-			System.out.println(Repository.getInstance().getArticles());
-			Repository.getInstance().getArticles().put(article.getName(), article);
-			DatabaseClass.saveData(DatabaseClass.myRepositoryPath);
+			if(!articles.containsKey(article.getName())) {
+				System.out.println(Repository.getInstance().getArticles());
+				article.setDeleted(false);
+				Repository.getInstance().getArticles().put(article.getName(), article);
+				DatabaseClass.saveData(DatabaseClass.myRepositoryPath);
+				return article;
+			}
 		}
-		return article;
+		return null;
 	}
 	
 	public Article getOneArticle(String name){
@@ -25,7 +30,8 @@ public class ArticleService {
 	}
 	
 	public Article removeArticle(String name) {
-		Article tempArticle = articles.remove(name);
+		Article tempArticle = articles.get(name);
+		tempArticle.setDeleted(true);
 		DatabaseClass.saveData(DatabaseClass.myRepositoryPath);
 		return tempArticle;
 	}
@@ -43,6 +49,16 @@ public class ArticleService {
 			return article;
 		}		
 		return null;
+	}
+	
+	public List<Article> getAllArticles(){
+		List<Article> tempArticles = new ArrayList<>();
+		for(Article art : articles.values()) {
+			if(!art.isDeleted()) {
+				tempArticles.add(art);
+			}
+		}
+		return tempArticles;
 	}
 
 }
