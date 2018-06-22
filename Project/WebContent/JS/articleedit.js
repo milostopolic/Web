@@ -80,6 +80,8 @@ function loadNavbar() {
 			if(data.role === 'ADMIN'){
 				$("#dropID").append(`<a style="cursor:pointer" class="dropdown-item" onClick="usersClick()">Users</a>`);
 				$("#dropID").append(`<a style="cursor:pointer" class="dropdown-item" onClick="articlesClick()">Articles</a>`);
+				$("#dropID").append(`<a style="cursor:pointer" class="dropdown-item" onClick="vehiclesClick()">Vehicles</a>`);
+				$("#dropID").append(`<a style="cursor:pointer" class="dropdown-item" onClick="restaurantsClick()">Restaurants</a>`);
 			} else {
 				$("#dropID").append(`<a class="dropdown-item" href="#">User page</a>`);
 			}
@@ -96,4 +98,12 @@ function usersClick() {
 
 function articlesClick() {
 	window.location.href="adminarticles.html";
+}
+
+function vehiclesClick() {
+	window.location.href="adminvehicles.html";
+}
+
+function restaurantsClick() {
+	window.location.href="adminrestaurants.html";
 }

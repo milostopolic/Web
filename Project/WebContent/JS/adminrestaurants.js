@@ -1,36 +1,11 @@
-var vehicleadd_url = "../Project/webapi/vehicles"
+var restaurants_url = "../Project/webapi/restaurants"
 var loggeduser_url = "../Project/webapi/users/loggeduser"
 var logout_url = "../Project/webapi/users/logout"
 
-$(document).on("submit", "#vehicleaddForm", function(e) {
-	e.preventDefault();
-	alert("PORUKAA");
-	
-	$.ajax({
-		type : 'POST',
-		url : vehicleadd_url,
-    contentType : 'application/json',
-		dataType : "json",
-    data:formToJSON(),
-		success : function(data) {
-			$("#paragraph").append(`Maker je: ` +data.maker);
-			$("#paragraph").append(` model je: ` +data.model);
-			window.location.href="adminvehicles.html";
-		},
-		error : function(XMLHttpRequest, textStatus, errorThrown) {
-			alert("AJAX ERROR: " + errorThrown+"register");
-		}
-	});
-});
-
 function formToJSON() {
 	return JSON.stringify({	
-    "maker":$('#maker').val(),
-    "model":$('#model').val(),
-    "type":$('#type').val(),
-	"registration":$('#registration').val(),
-	"note":$('#note').val(),
-	"year":$('#year').val()	
+    "username":$('#username').val(),
+    "password":$('#password').val()    
 	});
 }
 
@@ -95,6 +70,53 @@ function articlesClick() {
 function vehiclesClick() {
 	window.location.href="adminvehicles.html";
 }
-function restaurantsClick() {
+
+function vehiclesClick() {
 	window.location.href="adminrestaurants.html";
 }
+
+function loadRestaurants() {
+	$.ajax({
+		type : 'GET',
+		url : restaurants_url,
+    contentType : 'application/json',
+    	success: function(data){
+    		$("#restaurantsTableID").empty();    		
+    		for(let i = 0; i < data.length; i++){    			
+    			$("#restaurantsTableID").append(`<tr><th>` + data[i].name + `</th>
+    			<td>`+ data[i].address +`</td>
+    			<td>`+ data[i].category +`</td>    			
+    			<td>
+    <img class="editovanje" id="`+ data[i].name +`" style="margin-left:5px; cursor:pointer" height="24" witdh="24" src="images/edit.png" alt="appropriate alternative text goes here">
+    				</td>
+    			<td>
+    <img class="brisanje" id="` + data[i].name + `" style="margin-left:5px; cursor:pointer" height="24" witdh="24" src="images/delete.png" alt="appropriate alternative text goes here">
+    			</td></tr>`);
+    			//$('#'+data[i].name+' option:contains('+data[i].type+')').prop('selected',true);    			
+    		}
+    	},     	
+    	error: function(){
+    		
+    	}});
+}
+
+
+
+$(document).on('click', '.editovanje', function() {
+	var id = ($(this).attr('id'));
+	sessionStorage.setItem('editingRestaurant', id);
+	window.location.href="restaurantedit.html";
+});
+
+$(document).on('click', '.brisanje', function() {
+	var id = ($(this).attr('id'));	
+	$.ajax({
+		type: 'DELETE',
+		url : "../Project/webapi/restaurants/"+id,
+		contentType : 'application/json',
+		success: function() {
+			loadRestaurants();
+		},
+		error:function() {}
+	})
+});

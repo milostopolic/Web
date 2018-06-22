@@ -1,36 +1,11 @@
-var vehicleadd_url = "../Project/webapi/vehicles"
+var vehicles_url = "../Project/webapi/vehicles"
 var loggeduser_url = "../Project/webapi/users/loggeduser"
 var logout_url = "../Project/webapi/users/logout"
 
-$(document).on("submit", "#vehicleaddForm", function(e) {
-	e.preventDefault();
-	alert("PORUKAA");
-	
-	$.ajax({
-		type : 'POST',
-		url : vehicleadd_url,
-    contentType : 'application/json',
-		dataType : "json",
-    data:formToJSON(),
-		success : function(data) {
-			$("#paragraph").append(`Maker je: ` +data.maker);
-			$("#paragraph").append(` model je: ` +data.model);
-			window.location.href="adminvehicles.html";
-		},
-		error : function(XMLHttpRequest, textStatus, errorThrown) {
-			alert("AJAX ERROR: " + errorThrown+"register");
-		}
-	});
-});
-
 function formToJSON() {
 	return JSON.stringify({	
-    "maker":$('#maker').val(),
-    "model":$('#model').val(),
-    "type":$('#type').val(),
-	"registration":$('#registration').val(),
-	"note":$('#note').val(),
-	"year":$('#year').val()	
+    "username":$('#username').val(),
+    "password":$('#password').val()    
 	});
 }
 
@@ -95,6 +70,56 @@ function articlesClick() {
 function vehiclesClick() {
 	window.location.href="adminvehicles.html";
 }
+
 function restaurantsClick() {
 	window.location.href="adminrestaurants.html";
 }
+
+function loadVehicles() {
+	$.ajax({
+		type : 'GET',
+		url : vehicles_url,
+    contentType : 'application/json',
+    	success: function(data){
+    		$("#vehiclesTableID").empty();    		
+    		for(let i = 0; i < data.length; i++){    			
+    			$("#vehiclesTableID").append(`<tr><th>` + data[i].maker + `</th>
+    			<td>`+ data[i].model +`</td>
+    			<td>`+ data[i].type +`</td>
+    			<td>`+ data[i].registration +`</td>
+    			<td>` + data[i].year + `</td>
+    			<td>` + data[i].note + `</td>
+    			<td>
+    <img class="editovanje" id="`+ data[i].model +`" style="margin-left:5px; cursor:pointer" height="24" witdh="24" src="images/edit.png" alt="appropriate alternative text goes here">
+    				</td>
+    			<td>
+    <img class="brisanje" id="` + data[i].model + `" style="margin-left:5px; cursor:pointer" height="24" witdh="24" src="images/delete.png" alt="appropriate alternative text goes here">
+    			</td></tr>`);
+    			//$('#'+data[i].name+' option:contains('+data[i].type+')').prop('selected',true);    			
+    		}
+    	},     	
+    	error: function(){
+    		
+    	}});
+}
+
+
+
+$(document).on('click', '.editovanje', function() {
+	var id = ($(this).attr('id'));
+	sessionStorage.setItem('editingVehicle', id);
+	window.location.href="vehicleedit.html";
+});
+
+$(document).on('click', '.brisanje', function() {
+	var id = ($(this).attr('id'));	
+	$.ajax({
+		type: 'DELETE',
+		url : "../Project/webapi/vehicles/"+id,
+		contentType : 'application/json',
+		success: function() {
+			loadVehicles();
+		},
+		error:function() {}
+	})
+});

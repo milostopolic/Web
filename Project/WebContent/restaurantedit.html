@@ -5,13 +5,13 @@
 <title>Main page</title>
 <script src="JS/jquery-3.3.1.min.js"></script>
     <script src="JS/bootstrap.min.js"></script>
-    <script src="JS/restaurantadd.js"></script>       
+    <script src="JS/restaurantedit.js"></script>       
 	<!-- script src="JS/useredit.js"></script-->
     <!-- Bootstrap core CSS -->
     <link href="CSS/bootstrap.min.css" rel="stylesheet">
     <!-- link href="CSS/index.css" rel="stylesheet"-->
 </head>
-<body onLoad="loadNavbar()">
+<body onLoad="loadNavbar();loadRestaurant()">
 <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -22,13 +22,13 @@
     
   </div>
 </nav>
-<form id="restaurantaddForm">
+<form id="restauranteditForm">
 
 <div style="margin-top:10px" class="container">
 <div class="form-group row">
   <label for="example-text-input" class="col-2 col-form-label">Name</label>
   <div class="col-10">
-    <input class="form-control" type="text" name="name" id="name">
+    <input class="form-control" type="text" name="name" id="name" readonly>
   </div>
 </div>
 <div class="form-group row">
@@ -50,11 +50,10 @@
 					</select>
   </div>
 </div>
-
 <div class="form-group row">
   <label for="example-text-input" class="col-2 col-form-label"></label>
   <div class="col-10">
-   <button class="btn primary" type="submit">Add</button>
+   <button class="btn primary" type="submit">Edit</button>
   </div>
 </div>
 </div>

@@ -2,46 +2,134 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Add vehicle</title>
-	<script src="JS/jquery-3.3.1.min.js"></script>
-    <script src="JS/bootstrap.min.js"></script>       
-	<script src="JS/vehicleadd.js"></script>
+<title>Main page</title>
+<script src="JS/jquery-3.3.1.min.js"></script>
+    <script src="JS/bootstrap.min.js"></script>
+    <script src="JS/vehicleadd.js"></script>       
+	<!-- script src="JS/useredit.js"></script-->
     <!-- Bootstrap core CSS -->
     <link href="CSS/bootstrap.min.css" rel="stylesheet">
     <!-- link href="CSS/index.css" rel="stylesheet"-->
 </head>
-<body>
-	<form id="vehicleaddForm">
-		<table>
-			<tr>
-				<td>Maker:</td>
-				<td><input type="text" id="maker"/></td>
+<body onLoad="loadNavbar()">
+<nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <a class="navbar-brand" href="#">Navbar</a>
+
+  <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+    <!-- ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+      <li class="nav-item active">
+        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="register.html">Register</a>
+      </li>
+      <li class="nav-item">
+        <form class="form-inline my-2 my-lg-0">
+	      <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">	      
+	      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+	    </form>
+      </li>
+    </ul>
+    <form class="form-inline my-2 my-lg-0" id="loginForm">
+      <input class="form-control mr-sm-2" type="text" placeholder="Username" aria-label="Username" id="username">
+      <input class="form-control mr-sm-2" type="password" placeholder="Password" aria-label="Password" id="password">
+      <input class="btn btn-outline-success my-2 my-sm-0" type="submit" value="Log in"></input>
+    </form-->
+  </div>
+</nav>
+<form id="vehicleaddForm">
+<!-- table class="table">
+  <!-- thead class="thead-light">
+    <tr>
+      <th scope="col">Username</th>
+      <th scope="col">Name</th>
+      <th scope="col">Surname</th>
+      <th scope="col">Role</th>
+    </tr>
+  </thead>
+  <tbody id="usersTableID">
+    <tr>
+				<td>Username:</td>
+				<td><input type="text" id="username2"/></td>
 			</tr>
 			<tr>
-				<td>Model:</td>
-				<td><input type="text" id="model"/></td>
+				<td>Password:</td>
+				<td><input type="password" id="password2"/></td>
 			</tr>
 			<tr>
-				<td>Type:</td>
-				<td>
-					<select name="type">
-						<option value="0">Bicycle</option>
-						<option value="1">Moped</option>
-						<option value="2">Car</option>
-					</select>
+				<td>Name:</td>
+				<td><input type="text" id="name"/></td>
+			</tr>
+			<tr>
+				<td>Surname:</td>
+				<td><input type="text" id="surname"/></td>
+			</tr>
+			<tr>
+				<td>Contact:</td>
+				<td><input type="text" id="contact"/></td>
+			</tr>
+			<tr>
+				<td>Email address:</td>
+				<td><input type="text" id="email"/></td>
+			</tr>
+			<tr>
+				<td align="center">
+					<button class="btn primary" type="submit">Register</button>
 				</td>
 			</tr>
-			<tr>
-				<td>Registration:</td>
-				<td><input type="text" id="registration"/></td>
-			</tr>
-			<tr>
-				<td>Note:</td>
-				<td><input type="text" id="note"/></td>
-			</tr>	
-		</table>
-		<input type="submit" value="Add"/>
-	</form>	
-	<p id="paragraph"></p>
+  </tbody>
+</table-->
+<div style="margin-top:10px" class="container">
+<div class="form-group row">
+  <label for="example-text-input" class="col-2 col-form-label">Maker</label>
+  <div class="col-10">
+    <input class="form-control" type="text" name="maker" id="maker">
+  </div>
+</div>
+<div class="form-group row">
+  <label for="example-text-input" class="col-2 col-form-label">Model</label>
+  <div class="col-10">
+    <input class="form-control" type="text" name="model" id="model">
+  </div>
+</div>
+<div class="form-group row">
+  <label for="example-text-input" class="col-2 col-form-label">Type</label>
+  <div class="col-10">
+    <select class="form-control" name="type" id="type">
+    	<option value="BICYCLE">BICYCLE</option>
+    	<option value="MOPED">MOPED</option>
+    	<option value="CAR">CAR</option>
+    </select>
+  </div>
+</div>
+<div class="form-group row">
+  <label for="example-text-input" class="col-2 col-form-label">Registration</label>
+  <div class="col-10">
+    <input class="form-control" type="text" name="registration" id="registration">
+  </div>
+</div>
+<div class="form-group row">
+  <label for="example-text-input" class="col-2 col-form-label">Year of production</label>
+  <div class="col-10">
+    <input class="form-control" type="number" name="year" id="year">
+  </div>
+</div>
+<div class="form-group row">
+  <label for="example-text-input" class="col-2 col-form-label">Note</label>
+  <div class="col-10">
+    <input class="form-control" type="text" name="note" id="note">
+  </div>
+</div>
+<div class="form-group row">
+  <label for="example-text-input" class="col-2 col-form-label"></label>
+  <div class="col-10">
+   <button class="btn primary" type="submit">Add</button>
+  </div>
+</div>
+</div>
+</form>	
 </body>
 </html>

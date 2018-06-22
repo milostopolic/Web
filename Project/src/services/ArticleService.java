@@ -43,6 +43,9 @@ public class ArticleService {
 			//DatabaseClass.saveData(DatabaseClass.myRepositoryPath);
 			//System.out.println(tempUser.getPassword());
 			tempArticle.setPrice(article.getPrice());
+			tempArticle.setDescription(article.getDescription());
+			tempArticle.setQuantity(article.getQuantity());
+			tempArticle.setType(article.getType());
 			//System.out.println(tempUser.getPassword());
 			//users.put(tempUser.getUsername(), tempUser);
 			DatabaseClass.saveData(DatabaseClass.myRepositoryPath);

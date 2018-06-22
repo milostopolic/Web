@@ -1,21 +1,21 @@
-var vehicleadd_url = "../Project/webapi/vehicles"
+var articleadd_url = "../Project/webapi/articles"
 var loggeduser_url = "../Project/webapi/users/loggeduser"
-var logout_url = "../Project/webapi/users/logout"
+var restaurantedit_url = "../Project/webapi/restaurants/restaurantedit"
 
-$(document).on("submit", "#vehicleaddForm", function(e) {
+$(document).on("submit", "#restauranteditForm", function(e) {
 	e.preventDefault();
 	alert("PORUKAA");
 	
 	$.ajax({
 		type : 'POST',
-		url : vehicleadd_url,
+		url : restaurantedit_url,
     contentType : 'application/json',
 		dataType : "json",
     data:formToJSON(),
 		success : function(data) {
-			$("#paragraph").append(`Maker je: ` +data.maker);
-			$("#paragraph").append(` model je: ` +data.model);
-			window.location.href="adminvehicles.html";
+			/*$("#paragraph").append(`Name je: ` +data.name);
+			$("#paragraph").append(` quantity je: ` +data.quantity);*/
+			window.location.href="adminrestaurants.html";
 		},
 		error : function(XMLHttpRequest, textStatus, errorThrown) {
 			alert("AJAX ERROR: " + errorThrown+"register");
@@ -25,12 +25,29 @@ $(document).on("submit", "#vehicleaddForm", function(e) {
 
 function formToJSON() {
 	return JSON.stringify({	
-    "maker":$('#maker').val(),
-    "model":$('#model').val(),
-    "type":$('#type').val(),
-	"registration":$('#registration').val(),
-	"note":$('#note').val(),
-	"year":$('#year').val()	
+    "name":$('#name').val(),
+    "address":$('#address').val(),
+    "category":$('#category').val()
+	});
+}
+
+function loadRestaurant() {
+	var id = sessionStorage.getItem('editingRestaurant');
+	$.ajax({
+		type : 'GET',
+		url : "../Project/webapi/restaurants/"+id,
+    contentType : 'application/json',
+		
+		success : function(data) {
+			alert("SUCCESS");
+			console.log(data.model);
+			$('#name').val(data.name);
+			$('#address').val(data.address);
+			$('#category').val(data.category);			
+		},
+		error : function(XMLHttpRequest, textStatus, errorThrown) {
+			alert("ERROR");
+		}
 	});
 }
 
@@ -71,19 +88,6 @@ function loadNavbar() {
 	});
 }
 
-$(document).on('click', '#signOut', function(){
-	$.ajax({
-		type : 'GET',
-		url : logout_url,
-    contentType : 'application/json',
-    	success: function(){
-    		loadNavbar();
-    	},     	
-    	error: function(){
-    		
-    	}});
-});
-
 function usersClick() {
 	window.location.href="adminusers.html";
 }
@@ -95,6 +99,7 @@ function articlesClick() {
 function vehiclesClick() {
 	window.location.href="adminvehicles.html";
 }
+
 function restaurantsClick() {
 	window.location.href="adminrestaurants.html";
 }

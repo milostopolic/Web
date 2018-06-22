@@ -14,6 +14,7 @@ public class Restaurant implements Serializable{
 	private String address;
 	private RestaurantCategory category;
 	private List<Article> articles;	
+	private boolean deleted;
 	
 	public Restaurant() {
 		
@@ -56,6 +57,14 @@ public class Restaurant implements Serializable{
 
 	public void setCategory(RestaurantCategory category) {
 		this.category = category;
+	}
+
+	public boolean isDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
 	}
 
 	

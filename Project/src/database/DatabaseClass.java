@@ -147,6 +147,11 @@ public class DatabaseClass {
 			try {
 				Repository.getInstance().setVehicles(new HashMap<String,Vehicle>());
 				loadData(myRepositoryPath);
+				if(Repository.getInstance().getVehicles() == null) {
+					System.out.println("DOBRO");
+					Repository.getInstance().setVehicles(new HashMap<String,Vehicle>());
+				}
+				
 				String basePath = new File("").getAbsolutePath();
 			    System.out.println(basePath);
 
@@ -169,6 +174,10 @@ public class DatabaseClass {
 				Repository.getInstance().setRestaurants(new HashMap<String,Restaurant>());
 				System.out.println(Repository.getInstance().getRestaurants().size());
 				loadData(myRepositoryPath);
+				if(Repository.getInstance().getRestaurants() == null) {
+					System.out.println("DOBRO");
+					Repository.getInstance().setRestaurants(new HashMap<String,Restaurant>());
+				}
 				System.out.println(Repository.getInstance().getRestaurants().size());
 				String basePath = new File("").getAbsolutePath();
 			    System.out.println(basePath);

@@ -1,20 +1,20 @@
-var vehicleadd_url = "../Project/webapi/vehicles"
+var articleadd_url = "../Project/webapi/articles"
 var loggeduser_url = "../Project/webapi/users/loggeduser"
-var logout_url = "../Project/webapi/users/logout"
+var vehicleedit_url = "../Project/webapi/vehicles/vehicleedit"
 
-$(document).on("submit", "#vehicleaddForm", function(e) {
+$(document).on("submit", "#vehicleeditForm", function(e) {
 	e.preventDefault();
 	alert("PORUKAA");
 	
 	$.ajax({
 		type : 'POST',
-		url : vehicleadd_url,
+		url : vehicleedit_url,
     contentType : 'application/json',
 		dataType : "json",
     data:formToJSON(),
 		success : function(data) {
-			$("#paragraph").append(`Maker je: ` +data.maker);
-			$("#paragraph").append(` model je: ` +data.model);
+			/*$("#paragraph").append(`Name je: ` +data.name);
+			$("#paragraph").append(` quantity je: ` +data.quantity);*/
 			window.location.href="adminvehicles.html";
 		},
 		error : function(XMLHttpRequest, textStatus, errorThrown) {
@@ -29,8 +29,31 @@ function formToJSON() {
     "model":$('#model').val(),
     "type":$('#type').val(),
 	"registration":$('#registration').val(),
-	"note":$('#note').val(),
-	"year":$('#year').val()	
+	"year":$('#year').val(),
+	"note":$('#note').val()
+	});
+}
+
+function loadVehicle() {
+	var id = sessionStorage.getItem('editingVehicle');
+	$.ajax({
+		type : 'GET',
+		url : "../Project/webapi/vehicles/"+id,
+    contentType : 'application/json',
+		
+		success : function(data) {
+			alert("SUCCESS");
+			console.log(data.model);
+			$('#maker').val(data.maker);
+			$('#model').val(data.model);
+			$('#type').val(data.type);
+			$('#registration').val(data.registration);
+			$('#year').val(data.year);
+			$('#note').val(data.note);
+		},
+		error : function(XMLHttpRequest, textStatus, errorThrown) {
+			alert("ERROR");
+		}
 	});
 }
 
@@ -71,19 +94,6 @@ function loadNavbar() {
 	});
 }
 
-$(document).on('click', '#signOut', function(){
-	$.ajax({
-		type : 'GET',
-		url : logout_url,
-    contentType : 'application/json',
-    	success: function(){
-    		loadNavbar();
-    	},     	
-    	error: function(){
-    		
-    	}});
-});
-
 function usersClick() {
 	window.location.href="adminusers.html";
 }
@@ -95,6 +105,7 @@ function articlesClick() {
 function vehiclesClick() {
 	window.location.href="adminvehicles.html";
 }
+
 function restaurantsClick() {
 	window.location.href="adminrestaurants.html";
 }

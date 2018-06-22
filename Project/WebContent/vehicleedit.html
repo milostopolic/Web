@@ -5,13 +5,13 @@
 <title>Main page</title>
 <script src="JS/jquery-3.3.1.min.js"></script>
     <script src="JS/bootstrap.min.js"></script>
-    <script src="JS/articleadd.js"></script>       
+    <script src="JS/vehicleedit.js"></script>       
 	<!-- script src="JS/useredit.js"></script-->
     <!-- Bootstrap core CSS -->
     <link href="CSS/bootstrap.min.css" rel="stylesheet">
     <!-- link href="CSS/index.css" rel="stylesheet"-->
 </head>
-<body onLoad="loadNavbar()">
+<body onLoad="loadNavbar();loadVehicle()">
 <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -22,46 +22,53 @@
     
   </div>
 </nav>
-<form id="articleaddForm">
+<form id="vehicleeditForm">
 
 <div style="margin-top:10px" class="container">
 <div class="form-group row">
-  <label for="example-text-input" class="col-2 col-form-label">Name</label>
+  <label for="example-text-input" class="col-2 col-form-label">Maker</label>
   <div class="col-10">
-    <input class="form-control" type="text" name="name" id="name">
+    <input class="form-control" type="text" name="maker" id="maker">
   </div>
 </div>
 <div class="form-group row">
-  <label for="example-text-input" class="col-2 col-form-label">Price</label>
+  <label for="example-text-input" class="col-2 col-form-label">Model</label>
   <div class="col-10">
-    <input class="form-control" type="number" name="price" id="price">
-  </div>
-</div>
-<div class="form-group row">
-  <label for="example-text-input" class="col-2 col-form-label">Description</label>
-  <div class="col-10">
-    <input class="form-control" type="text" name="description" id="description">
-  </div>
-</div>
-<div class="form-group row">
-  <label for="example-text-input" class="col-2 col-form-label">Quantity</label>
-  <div class="col-10">
-    <input class="form-control" type="number" name="quantity" id="quantity">
+    <input class="form-control" type="text" name="model" id="model">
   </div>
 </div>
 <div class="form-group row">
   <label for="example-text-input" class="col-2 col-form-label">Type</label>
   <div class="col-10">
-    <select id="type" name="type" class="form-control">
-    	<option value="FOOD">FOOD</option>
-    	<option value="DRINK">DRINK</option>
+    <select class="form-control" name="type" id="type">
+    	<option value="BICYCLE">BICYCLE</option>
+    	<option value="MOPED">MOPED</option>
+    	<option value="CAR">CAR</option>
     </select>
+  </div>
+</div>
+<div class="form-group row">
+  <label for="example-text-input" class="col-2 col-form-label">Registration</label>
+  <div class="col-10">
+    <input class="form-control" type="text" name="registration" id="registration">
+  </div>
+</div>
+<div class="form-group row">
+  <label for="example-text-input" class="col-2 col-form-label">Year of production</label>
+  <div class="col-10">
+    <input class="form-control" type="number" name="year" id="year">
+  </div>
+</div>
+<div class="form-group row">
+  <label for="example-text-input" class="col-2 col-form-label">Note</label>
+  <div class="col-10">
+    <input class="form-control" type="text" name="note" id="note">
   </div>
 </div>
 <div class="form-group row">
   <label for="example-text-input" class="col-2 col-form-label"></label>
   <div class="col-10">
-   <button class="btn primary" type="submit">Add</button>
+   <button class="btn primary" type="submit">Edit</button>
   </div>
 </div>
 </div>
