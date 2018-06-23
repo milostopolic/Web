@@ -26,7 +26,7 @@ public class RestaurantResource {
 	public Response addRestaurant(Restaurant restaurant) {
 		Restaurant tempRestaurant = restaurantService.addRestaurant(restaurant);
 		if(tempRestaurant == null) {
-			return Response.status(Response.Status.BAD_REQUEST).build(); 
+			return Response.status(Response.Status.BAD_REQUEST).build();
 		}
 		return Response.ok(tempRestaurant, MediaType.APPLICATION_JSON).build();
 	}

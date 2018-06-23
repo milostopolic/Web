@@ -38,16 +38,11 @@ public class ArticleService {
 	
 	public Article editArticle(Article article) {		
 		if(articles.containsKey(article.getName())) {
-			Article tempArticle = articles.get(article.getName());
-			//users.remove(user.getUsername());
-			//DatabaseClass.saveData(DatabaseClass.myRepositoryPath);
-			//System.out.println(tempUser.getPassword());
+			Article tempArticle = articles.get(article.getName());			
 			tempArticle.setPrice(article.getPrice());
 			tempArticle.setDescription(article.getDescription());
 			tempArticle.setQuantity(article.getQuantity());
-			tempArticle.setType(article.getType());
-			//System.out.println(tempUser.getPassword());
-			//users.put(tempUser.getUsername(), tempUser);
+			tempArticle.setType(article.getType());			
 			DatabaseClass.saveData(DatabaseClass.myRepositoryPath);
 			return article;
 		}		

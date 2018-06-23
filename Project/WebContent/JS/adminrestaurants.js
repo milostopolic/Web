@@ -71,7 +71,7 @@ function vehiclesClick() {
 	window.location.href="adminvehicles.html";
 }
 
-function vehiclesClick() {
+function restaurantsClick() {
 	window.location.href="adminrestaurants.html";
 }
 

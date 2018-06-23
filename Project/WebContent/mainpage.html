@@ -10,13 +10,19 @@
     <!-- Bootstrap core CSS -->
     <link href="CSS/bootstrap.min.css" rel="stylesheet">
     <!-- link href="CSS/index.css" rel="stylesheet"-->
+    <style>
+    	#cards {
+    		margin:5px auto;    		
+    		max-width:300px;		
+    	}
+    </style>
 </head>
 <body onLoad="loadNavbar()">
 <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
-  <a class="navbar-brand" href="#">Navbar</a>
+  <a class="navbar-brand" href="mainpage.html">Home</a>
 
   <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
     <!-- ul class="navbar-nav mr-auto mt-2 mt-lg-0">
@@ -40,5 +46,30 @@
     </form-->
   </div>
 </nav>
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+  <li class="nav-item">
+    <a class="nav-link" style="cursor:pointer" id="domestic-tab" data-toggle="tab" role="tab" aria-controls="home" aria-selected=false>Domestic kitchen</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" style="cursor:pointer" id="barbeque-tab" data-toggle="tab" role="tab" aria-controls="profile" aria-selected="false">Barbeque</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" style="cursor:pointer" id="chinese-tab" data-toggle="tab" role="tab" aria-controls="contact" aria-selected="false">Chinese restaurants</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" style="cursor:pointer" id="indian-tab" data-toggle="tab" role="tab" aria-controls="contact" aria-selected="false">Indian restaurants</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" style="cursor:pointer" id="pastry-tab" data-toggle="tab" role="tab" aria-controls="contact" aria-selected="false">Pastry shops</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" style="cursor:pointer" id="pizzeria-tab" data-toggle="tab" role="tab" aria-controls="contact" aria-selected="false">Pizzerias</a>
+  </li>  
+</ul>
+
+<div id="cards">
+
+</div>
+
 </body>
 </html>

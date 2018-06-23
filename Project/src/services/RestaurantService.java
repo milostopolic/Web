@@ -45,6 +45,7 @@ public class RestaurantService {
 			Restaurant tempRestaurant = restaurants.get(restaurant.getName());
 			tempRestaurant.setAddress(restaurant.getAddress());
 			tempRestaurant.setCategory(restaurant.getCategory());
+			DatabaseClass.saveData(DatabaseClass.myRepositoryPath);
 			return restaurant;
 		}
 		return null;

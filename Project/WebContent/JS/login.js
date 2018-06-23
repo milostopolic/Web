@@ -1,6 +1,7 @@
 var login_url = "../Project/webapi/users/login"
 var loggeduser_url = "../Project/webapi/users/loggeduser"
 var logout_url = "../Project/webapi/users/logout"
+var restaurants_url = "../Project/webapi/restaurants"
 
 $(document).on("submit", "#loginForm", function(e) {
 	e.preventDefault();
@@ -90,6 +91,30 @@ $(document).on('click', '#signOut', function(){
     	}});
 });
 
+$(document).on('click', '#domestic-tab', function(){	
+	loadRestaurants("DOMESTIC");
+});
+
+$(document).on('click', '#barbeque-tab', function(){	
+	loadRestaurants("BARBEQUE");
+});
+
+$(document).on('click', '#chinese-tab', function(){	
+	loadRestaurants("CHINESE");
+});
+
+$(document).on('click', '#indian-tab', function(){	
+	loadRestaurants("INDIAN");
+});
+
+$(document).on('click', '#pastry-tab', function(){	
+	loadRestaurants("PASTRY");
+});
+
+$(document).on('click', '#pizzeria-tab', function(){	
+	loadRestaurants("PIZZERIA");
+});
+
 function usersClick() {
 	window.location.href="adminusers.html";
 }
@@ -101,4 +126,53 @@ function vehiclesClick() {
 }
 function restaurantsClick() {
 	window.location.href="adminrestaurants.html";
+}
+
+function loadRestaurants(category) {
+	$.ajax({
+		type : 'GET',
+		url : restaurants_url,
+    contentType : 'application/json',
+		
+		success : function(data) {
+			
+			$("#cards").empty();
+			for(let i = 0; i < data.length; i++) {				
+				if(data[i].category == category) {				
+					$("#cards").append(`<div class="card" style="width: 18rem;margin-top:20px">
+						<div class="card-body">
+						  <h5 class="card-title">`+ data[i].name +`</h5>
+						  <h6 class="card-subtitle mb-2 text-muted">`+ data[i].address +`</h6>
+						  <p class="card-text">`+ data[i].category +`</p>
+						  <a href="#" class="card-link">Card link</a>
+						  <a href="#" class="card-link">Another link</a>
+						</div>
+						</div>`);
+				}
+				/*if(data.role == 'ADMIN'){
+					//$("#listaID").append(`<li class="nav-item"><button class="btn btn-outline-success my-2 my-sm-0" onClick="usersClick()">Users</button></li>`)
+					$("#dropID").append(`<a style="cursor:pointer" class="dropdown-item" onClick="usersClick()">Users</a>`);
+					$("#dropID").append(`<a style="cursor:pointer" class="dropdown-item" onClick="articlesClick()">Articles</a>`);
+					$("#dropID").append(`<a style="cursor:pointer" class="dropdown-item" onClick="vehiclesClick()">Vehicles</a>`);
+					$("#dropID").append(`<a style="cursor:pointer" class="dropdown-item" onClick="restaurantsClick()">Restaurants</a>`);
+					
+				} else {
+					$("#dropID").append(`<a class="dropdown-item" href="#">User page</a>`);
+				}*/
+			}
+		},
+		error : function(XMLHttpRequest, textStatus, errorThrown) {
+			$("#navbarTogglerDemo03").empty();
+			$("#navbarTogglerDemo03").append(`<ul class="navbar-nav mr-auto mt-2 mt-lg-0">      
+      <li class="nav-item">
+        <a class="nav-link" href="register.html">Register</a>
+      </li>      
+    </ul>
+    <form class="form-inline my-2 my-lg-0" id="loginForm">
+      <input class="form-control mr-sm-2" type="text" placeholder="Username" aria-label="Username" id="username">
+      <input class="form-control mr-sm-2" type="password" placeholder="Password" aria-label="Password" id="password">
+      <input class="btn btn-outline-success my-2 my-sm-0" type="submit" value="Log in"></input>
+    </form>`);
+		}
+	});
 }
