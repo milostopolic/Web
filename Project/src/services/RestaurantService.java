@@ -13,13 +13,14 @@ import models.Restaurant;
 public class RestaurantService {
 	
 	private Map<String, Restaurant> restaurants = DatabaseClass.getRestaurants();
+	private Map<String, Article> articles = DatabaseClass.getArticles();
 	
 	public Restaurant addRestaurant(Restaurant restaurant) {
 		if(restaurant != null) {
 			if(!restaurants.containsKey(restaurant.getName())) {
 				System.out.println(Repository.getInstance().getRestaurants().size());
 				restaurant.setDeleted(false);
-				restaurant.setArticles(new ArrayList<Article>());
+				restaurant.setArticlesList(new ArrayList<String>());
 				Repository.getInstance().getRestaurants().put(restaurant.getName(), restaurant);
 				DatabaseClass.saveData(DatabaseClass.myRepositoryPath);
 				
@@ -59,6 +60,20 @@ public class RestaurantService {
 			}
 		}
 		return tempRestaurants;
+	}
+	
+	public List<Article> getRestaurantsArticles(String id) {
+		if(restaurants.containsKey(id)) {
+			List<Article> tempArticles = new ArrayList<>();
+			for(String art : restaurants.get(id).getArticlesList()) {
+				if(!articles.get(art).isDeleted()) {
+					tempArticles.add(articles.get(art));
+				}				
+			}
+			System.out.println(tempArticles.size() + "````````````````");
+			return tempArticles;
+		}
+		return null;
 	}
 
 }

@@ -12,6 +12,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import models.Article;
 import models.Restaurant;
 import services.RestaurantService;
 
@@ -39,6 +40,16 @@ public class RestaurantResource {
 			return Response.status(Response.Status.BAD_REQUEST).build(); 
 		}
 		return Response.ok(tempRestaurant, MediaType.APPLICATION_JSON).build();
+	}
+	
+	@Path("/restaurant/{id}")
+	@GET
+	public Response getRestaurantsArticles(@PathParam("id") String id) {
+		List<Article> tempArticles = restaurantService.getRestaurantsArticles(id);
+		if(tempArticles == null) {
+			return Response.status(Response.Status.BAD_REQUEST).build(); 
+		}
+		return Response.ok(tempArticles, MediaType.APPLICATION_JSON).build();
 	}
 	
 	@Path("restaurantedit")

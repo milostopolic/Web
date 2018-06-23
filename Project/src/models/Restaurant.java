@@ -1,6 +1,7 @@
 package models;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Restaurant implements Serializable{
@@ -13,18 +14,18 @@ public class Restaurant implements Serializable{
 	private String name;
 	private String address;
 	private RestaurantCategory category;
-	private List<Article> articles;	
+	private List<String> articlesList;
 	private boolean deleted;
 	
 	public Restaurant() {
-		
+		this.articlesList = new ArrayList<>();
 	}
 
-	public Restaurant(String name, String address, List<Article> articles) {
+	public Restaurant(String name, String address, List<String> articles) {
 		super();
 		this.name = name;
 		this.address = address;
-		this.articles = articles;		
+		this.articlesList = articles;		
 	}
 
 	public String getName() {
@@ -43,12 +44,12 @@ public class Restaurant implements Serializable{
 		this.address = address;
 	}
 
-	public List<Article> getArticles() {
-		return articles;
+	public List<String> getArticlesList() {
+		return articlesList;
 	}
 
-	public void setArticles(List<Article> articles) {
-		this.articles = articles;
+	public void setArticlesList(List<String> articlesList) {
+		this.articlesList = articlesList;
 	}
 
 	public RestaurantCategory getCategory() {

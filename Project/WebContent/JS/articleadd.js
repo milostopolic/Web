@@ -2,11 +2,13 @@ var articleadd_url = "../Project/webapi/articles"
 var articles_url = "../Project/webapi/articles"
 var loggeduser_url = "../Project/webapi/users/loggeduser"
 var logout_url = "../Project/webapi/users/logout"
+var restaurants_url = "../Project/webapi/restaurants"
+
+var restorani=null;
 
 $(document).on("submit", "#articleaddForm", function(e) {
 	e.preventDefault();
-	alert("PORUKAA");
-	
+	alert("PORUKAA");	
 	$.ajax({
 		type : 'POST',
 		url : articleadd_url,
@@ -25,12 +27,19 @@ $(document).on("submit", "#articleaddForm", function(e) {
 });
 
 function formToJSON() {
+	var arrayOfObjects = [];
+	for(restoran of restorani) {		
+		if(document.getElementById(restoran.name).checked) {			
+			arrayOfObjects.push(restoran.name);
+		}
+	}
 	return JSON.stringify({	
     "name":$('#name').val(),
     "price":$('#price').val(),
     "description":$('#description').val(),
 	"quantity":$('#quantity').val(),
-	"type":$('#type').val()	
+	"type":$('#type').val(),
+	"restaurantsList":arrayOfObjects
 	});
 }
 
@@ -99,4 +108,27 @@ function vehiclesClick() {
 
 function restaurantsClick() {
 	window.location.href="adminrestaurants.html";
+}
+
+function loadRestaurants() {
+	$.ajax({
+		type : 'GET',
+		url : restaurants_url,
+    contentType : 'application/json',
+		
+		success : function(data) {
+			restorani = data;
+			$("#checkboxID").empty();
+			for(var i = 0; i < data.length; i++) {
+				$("#checkboxID").append(`<div class="form-check">
+					  <input id="`+data[i].name+`" class="form-check-input" type="checkbox" value="`+data[i].name+`">
+					  <label class="form-check-label" for="defaultCheck1">`+data[i].name+`</label>
+					</div>`);
+			}
+			
+		},
+		error : function(XMLHttpRequest, textStatus, errorThrown) {
+			
+		}
+	});
 }

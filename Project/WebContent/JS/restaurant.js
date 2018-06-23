@@ -91,29 +91,7 @@ $(document).on('click', '#signOut', function(){
     	}});
 });
 
-$(document).on('click', '#domestic-tab', function(){	
-	loadRestaurants("DOMESTIC");
-});
 
-$(document).on('click', '#barbeque-tab', function(){	
-	loadRestaurants("BARBEQUE");
-});
-
-$(document).on('click', '#chinese-tab', function(){	
-	loadRestaurants("CHINESE");
-});
-
-$(document).on('click', '#indian-tab', function(){	
-	loadRestaurants("INDIAN");
-});
-
-$(document).on('click', '#pastry-tab', function(){	
-	loadRestaurants("PASTRY");
-});
-
-$(document).on('click', '#pizzeria-tab', function(){	
-	loadRestaurants("PIZZERIA");
-});
 
 function usersClick() {
 	window.location.href="adminusers.html";
@@ -128,27 +106,29 @@ function restaurantsClick() {
 	window.location.href="adminrestaurants.html";
 }
 
-function loadRestaurants(category) {
+function loadRestaurant() {
+	var id = sessionStorage.getItem('restaurantDetails');
 	$.ajax({
 		type : 'GET',
-		url : restaurants_url,
+		url : restaurants_url+"/"+id,
     contentType : 'application/json',
 		
 		success : function(data) {
 			
 			$("#cards").empty();
-			for(let i = 0; i < data.length; i++) {				
-				if(data[i].category == category) {				
-					$("#cards").append(`<div class="card" style="width: 18rem;margin-top:20px">
-						<div class="card-body">
-						  <h5 class="card-title">`+ data[i].name +`</h5>
-						  <h6 class="card-subtitle mb-2 text-muted">`+ data[i].address +`</h6>
-						  <p class="card-text">`+ data[i].category +`</p>
-						  <a style="cursor:pointer;color:blue" id="`+data[i].name+`" class="card-link cardsClass">Details</a>
-						  <!--a href="#" class="card-link">Another link</a-->
-						</div> 
-						</div>`);
-				}
+						
+							
+			$("#cards").append(`<div class="card" style="width: 18rem;margin-top:20px;background:#E3F1F7">
+				<div class="card-body">
+				  <h5 class="card-title">`+ data.name +`</h5>
+				  <h6 class="card-subtitle mb-2 text-muted">`+ data.address +`</h6>
+				  <p class="card-text">`+ data.category +`</p>				  
+				</div> 
+				</div>`);
+			
+			loadArticles();
+			
+			}
 				/*if(data.role == 'ADMIN'){
 					//$("#listaID").append(`<li class="nav-item"><button class="btn btn-outline-success my-2 my-sm-0" onClick="usersClick()">Users</button></li>`)
 					$("#dropID").append(`<a style="cursor:pointer" class="dropdown-item" onClick="usersClick()">Users</a>`);
@@ -159,8 +139,8 @@ function loadRestaurants(category) {
 				} else {
 					$("#dropID").append(`<a class="dropdown-item" href="#">User page</a>`);
 				}*/
-			}
-		},
+			
+		,
 		error : function(XMLHttpRequest, textStatus, errorThrown) {
 			$("#navbarTogglerDemo03").empty();
 			$("#navbarTogglerDemo03").append(`<ul class="navbar-nav mr-auto mt-2 mt-lg-0">      
@@ -175,6 +155,28 @@ function loadRestaurants(category) {
     </form>`);
 		}
 	});
+}
+
+function loadArticles() {
+	var id = sessionStorage.getItem('restaurantDetails');
+	$.ajax({
+		type : 'GET',
+		url : restaurants_url+"/restaurant/"+id,
+    contentType : 'application/json',
+    success : function(data) {
+    	$("#art-cards").empty();
+    	for(var art of data) {
+    		$("#art-cards").append(`<div class="card" style="width: 18rem;margin-top:20px">
+    				<div class="card-body">
+  				  <h5 class="card-title">`+ art.name +`</h5>
+  				  <h6 class="card-subtitle mb-2 text-muted">`+ art.price +` RSD</h6>
+  				  <p class="card-text">`+ art.description +`</p>				  
+  				</div> 
+  				</div>`);
+    	}
+    },
+    error : function() {}
+  });
 }
 
 $(document).on('click', '.cardsClass', function(){

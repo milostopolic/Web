@@ -1,6 +1,8 @@
 package models;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Article implements Serializable {
 
@@ -15,6 +17,7 @@ public class Article implements Serializable {
 	private String quantity;
 	private ArticleType type;
 	private boolean deleted;
+	private List<String> restaurantsList;	
 	
 	public Article(String name, String price, String description, String quantity) {
 		super();
@@ -74,6 +77,14 @@ public class Article implements Serializable {
 
 	public void setDeleted(boolean deleted) {
 		this.deleted = deleted;
+	}
+
+	public List<String> getRestaurantsList() {
+		return restaurantsList;
+	}
+
+	public void setRestaurantsList(List<String> restaurantsList) {
+		this.restaurantsList = restaurantsList;
 	}
 	
 	
