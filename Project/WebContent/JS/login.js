@@ -2,6 +2,10 @@ var login_url = "../Project/webapi/users/login"
 var loggeduser_url = "../Project/webapi/users/loggeduser"
 var logout_url = "../Project/webapi/users/logout"
 var restaurants_url = "../Project/webapi/restaurants"
+var fav_url = "../Project/webapi/users/favrestaurant"
+var loggedUser
+
+
 
 $(document).on("submit", "#loginForm", function(e) {
 	e.preventDefault();
@@ -30,12 +34,15 @@ function formToJSON() {
 }
 
 function loadNavbar() {
+	
 	$.ajax({
 		type : 'GET',
 		url : loggeduser_url,
     contentType : 'application/json',
 		
 		success : function(data) {
+			loggedUser = data;
+			loadRestaurants('DOMESTIC');
 			console.log(data.role);
 			$("#navbarTogglerDemo03").empty();
 			$("#navbarTogglerDemo03").append(`<ul class="navbar-nav ml-auto mt-2 mt-lg-0"  id="listaID">			      
@@ -59,7 +66,7 @@ function loadNavbar() {
 				$("#dropID").append(`<a style="cursor:pointer" class="dropdown-item" onClick="restaurantsClick()">Restaurants</a>`);
 				
 			} else {
-				$("#dropID").append(`<a class="dropdown-item" href="#">User page</a>`);
+				$("#dropID").append(`<a class="dropdown-item" href="userpage.html">User page</a>`);
 			}
 		},
 		error : function(XMLHttpRequest, textStatus, errorThrown) {
@@ -74,6 +81,7 @@ function loadNavbar() {
       <input class="form-control mr-sm-2" type="password" placeholder="Password" aria-label="Password" id="password">
       <input class="btn btn-outline-success my-2 my-sm-0" type="submit" value="Log in"></input>
     </form>`);
+			loadRestaurants('DOMESTIC');
 		}
 	});
 }
@@ -140,7 +148,7 @@ function loadRestaurants(category) {
 			for(let i = 0; i < data.length; i++) {				
 				if(data[i].category == category) {				
 					$("#cards").append(`<div class="card" style="width: 18rem;margin-top:20px">
-						<div class="card-body">
+						<div id="title`+i+`" class="card-body">
 						  <h5 class="card-title">`+ data[i].name +`</h5>
 						  <h6 class="card-subtitle mb-2 text-muted">`+ data[i].address +`</h6>
 						  <p class="card-text">`+ data[i].category +`</p>
@@ -148,31 +156,19 @@ function loadRestaurants(category) {
 						  <!--a href="#" class="card-link">Another link</a-->
 						</div> 
 						</div>`);
-				}
-				/*if(data.role == 'ADMIN'){
-					//$("#listaID").append(`<li class="nav-item"><button class="btn btn-outline-success my-2 my-sm-0" onClick="usersClick()">Users</button></li>`)
-					$("#dropID").append(`<a style="cursor:pointer" class="dropdown-item" onClick="usersClick()">Users</a>`);
-					$("#dropID").append(`<a style="cursor:pointer" class="dropdown-item" onClick="articlesClick()">Articles</a>`);
-					$("#dropID").append(`<a style="cursor:pointer" class="dropdown-item" onClick="vehiclesClick()">Vehicles</a>`);
-					$("#dropID").append(`<a style="cursor:pointer" class="dropdown-item" onClick="restaurantsClick()">Restaurants</a>`);
 					
-				} else {
-					$("#dropID").append(`<a class="dropdown-item" href="#">User page</a>`);
-				}*/
+					if(loggedUser != null) {
+						if(loggedUser.role == 'CUSTOMER') {
+							$("#title"+ i).append(`<img id="`+ data[i].name +`" class="float-right starClass" src="images/star.png"></img>`);
+						}
+					}
+					
+				}
+				
 			}
 		},
-		error : function(XMLHttpRequest, textStatus, errorThrown) {
-			$("#navbarTogglerDemo03").empty();
-			$("#navbarTogglerDemo03").append(`<ul class="navbar-nav mr-auto mt-2 mt-lg-0">      
-      <li class="nav-item">
-        <a class="nav-link" href="register.html">Register</a>
-      </li>      
-    </ul>
-    <form class="form-inline my-2 my-lg-0" id="loginForm">
-      <input class="form-control mr-sm-2" type="text" placeholder="Username" aria-label="Username" id="username">
-      <input class="form-control mr-sm-2" type="password" placeholder="Password" aria-label="Password" id="password">
-      <input class="btn btn-outline-success my-2 my-sm-0" type="submit" value="Log in"></input>
-    </form>`);
+		error : function() {
+			
 		}
 	});
 }
@@ -180,4 +176,19 @@ function loadRestaurants(category) {
 $(document).on('click', '.cardsClass', function(){
 	sessionStorage.setItem("restaurantDetails", $(this).attr("id"));
 	window.location.href="restaurant.html";
+});
+
+$(document).on('click', '.starClass', function(){
+	var id = $(this).attr("id");
+	$.ajax({
+		type : 'POST',
+		url : fav_url+"/" + id,
+    contentType : 'application/json',
+    	success: function(){
+    		loadNavbar();
+    		toastr.success("Restaurant added to favourites.");
+    	},     	
+    	error: function(){
+    		toastr.warning("Restaurant is already added to favourites.");
+    	}});
 });

@@ -1,6 +1,8 @@
 package models;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class User implements Serializable{
 	
@@ -16,6 +18,7 @@ public class User implements Serializable{
 	private String contact;
 	private String email;
 	private String date;
+	private List<String> favouriteRestaurants;
 	
 	/*public User(String username, String password, String name, String surname) {
 		super();
@@ -38,7 +41,7 @@ public class User implements Serializable{
 	}
 
 	public User() {
-		
+		this.favouriteRestaurants = new ArrayList<>();
 	}
 
 	public String getUsername() {
@@ -103,6 +106,14 @@ public class User implements Serializable{
 
 	public void setRole(UserRole role) {
 		this.role = role;
+	}
+
+	public List<String> getFavouriteRestaurants() {
+		return favouriteRestaurants;
+	}
+
+	public void setFavouriteRestaurants(List<String> favouriteRestaurants) {
+		this.favouriteRestaurants = favouriteRestaurants;
 	}
 	
 	

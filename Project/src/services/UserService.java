@@ -8,6 +8,7 @@ import java.util.Map;
 
 import database.DatabaseClass;
 import models.Repository;
+import models.Restaurant;
 import models.User;
 import models.UserRole;
 
@@ -20,7 +21,8 @@ public class UserService {
 			if(!users.containsKey(user.getUsername())) {
 				System.out.println("usao u if");
 				user.setRole(UserRole.CUSTOMER);
-				user.setDate(new SimpleDateFormat("dd-MM-yyyy").format(new Date()));			
+				user.setDate(new SimpleDateFormat("dd-MM-yyyy").format(new Date()));	
+				user.setFavouriteRestaurants(new ArrayList<>());
 				Repository.getInstance().getUsers().put(user.getUsername(), user);
 				DatabaseClass.saveData(DatabaseClass.myRepositoryPath);
 				
@@ -72,6 +74,23 @@ public class UserService {
 	
 	public  List<User> getAllUsers(){
 		return new ArrayList<User>(users.values()); 
+	}
+	
+	public String getFavRestaurant(String id, User user) {
+		for(String str : user.getFavouriteRestaurants())
+			if(str.equals(id))
+				return null;
+		user.getFavouriteRestaurants().add(id);
+		DatabaseClass.saveData(DatabaseClass.myRepositoryPath);
+		return id;
+	}
+	
+	public List<Restaurant> getFavRestaurants(User user) {
+		List<Restaurant> tempRestaurants = new ArrayList<>();
+		for(String res : user.getFavouriteRestaurants()) {
+			tempRestaurants.add(Repository.getInstance().getRestaurants().get(res));
+		}
+		return tempRestaurants;
 	}
 
 }

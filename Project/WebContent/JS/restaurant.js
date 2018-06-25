@@ -59,7 +59,7 @@ function loadNavbar() {
 				$("#dropID").append(`<a style="cursor:pointer" class="dropdown-item" onClick="restaurantsClick()">Restaurants</a>`);
 				
 			} else {
-				$("#dropID").append(`<a class="dropdown-item" href="#">User page</a>`);
+				$("#dropID").append(`<a class="dropdown-item" href="userpage.html">User page</a>`);
 			}
 		},
 		error : function(XMLHttpRequest, textStatus, errorThrown) {

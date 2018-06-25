@@ -13,6 +13,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import models.Restaurant;
 import models.User;
 import models.UserRole;
 import services.UserService;
@@ -115,4 +116,28 @@ public class UserResource {
 	    String json = //convert entity to json
 	    return Response.ok(json, MediaType.APPLICATION_JSON).build();
 	}*/
+	
+	@POST
+	@Path("/favrestaurant/{id}")
+	public Response getFavRestaurant(@PathParam("id") String id, @Context HttpServletRequest request) {
+		User tempUser = (User) request.getSession().getAttribute("loggedUser");
+		
+		String resp = userService.getFavRestaurant(id, tempUser);
+		
+		if(tempUser == null || resp == null) {
+			return Response.status(Response.Status.BAD_REQUEST).build();
+		}
+		return Response.ok(tempUser, MediaType.APPLICATION_JSON).build();
+	}
+	
+	@GET
+	@Path("/favrestaurants")
+	public Response getFavRestaurants(@Context HttpServletRequest request) {
+		User tempUser = (User) request.getSession().getAttribute("loggedUser");
+		List<Restaurant> tempRestaurants = userService.getFavRestaurants(tempUser);
+		if(tempRestaurants == null) {
+			return Response.status(Response.Status.BAD_REQUEST).build();
+		}
+		return Response.ok(tempRestaurants, MediaType.APPLICATION_JSON).build();
+	}
 }
