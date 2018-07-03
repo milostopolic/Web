@@ -3,7 +3,9 @@ var loggeduser_url = "../Project/webapi/users/loggeduser"
 var logout_url = "../Project/webapi/users/logout"
 var restaurants_url = "../Project/webapi/restaurants"
 var fav_url = "../Project/webapi/users/favrestaurant"
+var orders_url = "../Project/webapi/orders/"
 var loggedUser
+var searchSource = new Array()
 
 
 
@@ -33,18 +35,18 @@ function formToJSON() {
 	});
 }
 
-function loadNavbar() {
-	
+function loadNavbar() {	
 	$.ajax({
 		type : 'GET',
 		url : loggeduser_url,
     contentType : 'application/json',
-		
+    
 		success : function(data) {
 			loggedUser = data;
 			loadRestaurants('DOMESTIC');
 			console.log(data.role);
 			$("#navbarTogglerDemo03").empty();
+			//$("#navbarTogglerDemo03").append(`<input class="search" type="text"/><button class="searchBtn">Search</button>`);
 			$("#navbarTogglerDemo03").append(`<ul class="navbar-nav ml-auto mt-2 mt-lg-0"  id="listaID">			      
 				      
 				      <li class="nav-item dropdown">
@@ -65,15 +67,19 @@ function loadNavbar() {
 				$("#dropID").append(`<a style="cursor:pointer" class="dropdown-item" onClick="vehiclesClick()">Vehicles</a>`);
 				$("#dropID").append(`<a style="cursor:pointer" class="dropdown-item" onClick="restaurantsClick()">Restaurants</a>`);
 				
-			} else {
+			} else if(data.role == 'CUSTOMER') {
 				$("#dropID").append(`<a class="dropdown-item" href="userpage.html">User page</a>`);
+				$("#dropID").append(`<a class="dropdown-item" id="cartClick" style="cursor:pointer" onclick="loadCart()" data-toggle="modal" data-target="#exampleModal">My cart</a>`);
+			} else if(data.role == 'DELIVERY') {
+				$("#dropID").append(`<a class="dropdown-item" href="deliveryorders.html">Orders</a>`);
 			}
 		},
 		error : function(XMLHttpRequest, textStatus, errorThrown) {
 			$("#navbarTogglerDemo03").empty();
+			//$("#navbarTogglerDemo03").append(`<input class="search" type="text"/><button class="searchBtn">Search</button>`);
 			$("#navbarTogglerDemo03").append(`<ul class="navbar-nav mr-auto mt-2 mt-lg-0">      
       <li class="nav-item">
-        <a class="nav-link" href="register.html">Register</a>
+        <a style="margin-left:100px" class="nav-link" href="register.html">Register</a>
       </li>      
     </ul>
     <form class="form-inline my-2 my-lg-0" id="loginForm">
@@ -137,6 +143,7 @@ function restaurantsClick() {
 }
 
 function loadRestaurants(category) {
+	searchSource = [];
 	$.ajax({
 		type : 'GET',
 		url : restaurants_url,
@@ -145,7 +152,8 @@ function loadRestaurants(category) {
 		success : function(data) {
 			
 			$("#cards").empty();
-			for(let i = 0; i < data.length; i++) {				
+			for(let i = 0; i < data.length; i++) {	
+				searchSource.push(data[i].name);
 				if(data[i].category == category) {				
 					$("#cards").append(`<div class="card" style="width: 18rem;margin-top:20px">
 						<div id="title`+i+`" class="card-body">
@@ -170,7 +178,10 @@ function loadRestaurants(category) {
 		error : function() {
 			
 		}
+		
 	});
+	console.log(searchSource);
+	$(".search").autocomplete({source:searchSource});
 }
 
 $(document).on('click', '.cardsClass', function(){
@@ -192,3 +203,126 @@ $(document).on('click', '.starClass', function(){
     		toastr.warning("Restaurant is already added to favourites.");
     	}});
 });
+
+$(document).on('click', '.searchBtn', function(){
+	if($('.search').val() != "") {
+		sessionStorage.setItem("restaurantDetails", $('.search').val());
+		window.location.href="restaurant.html";
+	}	
+});
+
+function loadCart(){
+	$("#modal-body").empty();
+	$("#modal-footer").empty();
+	if(loggedUser.cart.items.length > 0) {
+		$("#modal-body").append(`<table class="table">
+		  <thead class="thead-light">
+		    <tr>
+		      <th scope="col">Article</th>
+		      <th scope="col">Unit price</th>
+		      <th scope="col">Quantity</th>
+		      <th scope="col"></th>
+		    </tr>
+		  </thead>
+		  <tbody id="cartTable">
+		    
+		  </tbody>
+		</table>`);
+		for(let i = 0; i < loggedUser.cart.items.length; i++) {
+			$("#cartTable").append(`<tr>
+			<th>`+ loggedUser.cart.items[i].article +`</th><td>`+ loggedUser.cart.items[i].price +`</td>
+			<td><input style="max-width:50px" class="quant" id="` +loggedUser.cart.items[i].article + `" onkeydown="return false" min="1" max="10" type="number" value="`+loggedUser.cart.items[i].quantity +`"></td>
+			<td><img class="brisanje" id="` +loggedUser.cart.items[i].article + `" style="margin-left:5px; cursor:pointer" height="24" witdh="24" src="images/delete.png" alt="appropriate alternative text goes here"></td>
+			</tr>`);
+		}
+		$("#modal-body").append(`<p>Total price: `+ loggedUser.cart.totalPrice +`</p>`);
+		$("#modal-footer").append(`<input id="note" class="form-control mr-sm-2" type="text" placeholder="Note"/>`);
+		$("#modal-footer").append(`<button onclick="order()" class="btn btn-success">Order</button>`);
+		
+	} else {
+		$("#modal-body").append(`<p>Your cart is empty.</p>`);
+	}
+	
+	
+}
+
+$(document).on('click', '.brisanje', function() {
+	var id = ($(this).attr('id'));	
+	$.ajax({
+		type: 'DELETE',
+		url : "../Project/webapi/orders/deleteitem/"+id,
+		contentType : 'application/json',
+		success: function() {
+			$.ajax({
+				type : 'GET',
+				url : loggeduser_url,
+		    contentType : 'application/json',
+		    
+				success : function(data) {
+					loggedUser = data;
+					loadCart();
+				},
+				error: function() {
+					
+				}
+			});
+		},
+		error:function() {}
+	})
+});
+
+$(document).on('change', '.quant', function(){
+	var id = ($(this).attr('id'));
+	var q = ($(this).val());
+	console.log(q);	
+	$.ajax({
+		type: 'POST',
+		url: orders_url + "changequantity/" + id + "/" + q,
+		success: function() {
+			$.ajax({
+				type : 'GET',
+				url : loggeduser_url,
+		    contentType : 'application/json',
+		    
+				success : function(data) {
+					loggedUser = data;
+					loadCart();
+				},
+				error: function() {
+					
+				}
+			});
+			
+		},
+		error:function(){
+			
+		}
+	})
+	
+});
+
+function order() {
+	$.ajax({
+		type : 'POST',
+		url : orders_url,
+    contentType : 'application/json',
+		dataType : "json",
+    data:orderToJSON(),
+		success : function(data) {
+			alert("SUCCESS");
+			loadNavbar();
+			$('#exampleModal').modal('toggle');
+		},
+		error : function(XMLHttpRequest, textStatus, errorThrown) {
+			alert("ERROR");
+		}
+	});
+};
+
+function orderToJSON() {
+	return JSON.stringify({	
+    "note":$('#note').val(),
+    "items":loggedUser.cart.items,
+    "totalPrice":loggedUser.cart.totalPrice
+	});
+}

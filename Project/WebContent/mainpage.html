@@ -8,10 +8,12 @@
     <script src="JS/login.js"></script>       
     <script src="JS/toastr.min.js"></script>
     <script src="JS/toastr-options.js"></script>
+    <script src="JS/jquery-ui.js"></script>
 	<!-- script src="JS/useredit.js"></script-->
     <!-- Bootstrap core CSS -->
     <link href="CSS/bootstrap.min.css" rel="stylesheet">
     <link href="CSS/toastr.min.css" rel="stylesheet">
+    <link href="CSS/jquery-ui.css" rel="stylesheet">
     <!-- link href="CSS/index.css" rel="stylesheet"-->
     <style>
     	#cards {
@@ -26,7 +28,8 @@
     <span class="navbar-toggler-icon"></span>
   </button>
   <a class="navbar-brand" href="mainpage.html">Home</a>
-
+  <input placeholder="Search restaurant" style="width:200px" class="form-control search" type="text"/>
+  <button style="margin-left:5px" class="btn btn-outline-success searchBtn">Search</button>
   <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
     <!-- ul class="navbar-nav mr-auto mt-2 mt-lg-0">
       <li class="nav-item active">
@@ -46,7 +49,8 @@
       <input class="form-control mr-sm-2" type="text" placeholder="Username" aria-label="Username" id="username">
       <input class="form-control mr-sm-2" type="password" placeholder="Password" aria-label="Password" id="password">
       <input class="btn btn-outline-success my-2 my-sm-0" type="submit" value="Log in"></input>
-    </form-->
+    </form-->  
+      
   </div>
 </nav>
 <ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -72,6 +76,38 @@
 
 <div id="cards">
 
+</div>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Cart</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="modal-body">
+        <!-- table class="table">
+		  <thead class="thead-light">
+		    <tr>
+		      <th scope="col">Article</th>
+		      <th scope="col">Price</th>
+		      <th scope="col">Quantity</th>
+		      <th scope="col"></th>
+		    </tr>
+		  </thead>
+		  <tbody id="usersTableID">
+		    
+		  </tbody>
+		</table-->	
+      </div>
+      <div class="modal-footer container" id="modal-footer">
+        <!-- button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button-->
+      </div>
+    </div>
+  </div>
 </div>
 
 </body>

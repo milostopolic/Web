@@ -14,6 +14,7 @@ import java.util.Map;
 import com.google.gson.Gson;
 
 import models.Article;
+import models.Order;
 import models.Repository;
 import models.Restaurant;
 import models.User;
@@ -28,6 +29,7 @@ public class DatabaseClass {
 	private static Map<String, Article> articles = Repository.getInstance().getArticles();
 	private static Map<String, Vehicle> vehicles = Repository.getInstance().getVehicles();
 	private static Map<String, Restaurant> restaurants = Repository.getInstance().getRestaurants();
+	private static Map<Integer, Order> orders = Repository.getInstance().getOrders();
 	/*private static Map<String,Subforum> subforums;
 	private static Map<Integer,Report> reports;*/
 	
@@ -194,6 +196,33 @@ public class DatabaseClass {
 		return Repository.getInstance().getRestaurants();
 	}
 	
+	public static Map<Integer, Order> getOrders() {
+		if(Repository.getInstance().getOrders() == null){
+			try {
+				System.out.println("USAO JE GDE treba");
+				Repository.getInstance().setOrders(new HashMap<Integer,Order>());
+				System.out.println(Repository.getInstance().getOrders().size());
+				loadData(myRepositoryPath);
+				if(Repository.getInstance().getOrders() == null) {
+					System.out.println("DOBRO");
+					Repository.getInstance().setOrders(new HashMap<Integer,Order>());
+				}
+				
+				String basePath = new File("").getAbsolutePath();
+			    System.out.println(basePath);
+
+			    String path = new File("src/img/").getAbsolutePath();
+			    System.out.println(path);
+				
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				Repository.getInstance().setOrders(new HashMap<Integer,Order>());
+			}
+		}
+		return Repository.getInstance().getOrders();
+	}
+	
 	/*public static Map<String,Subforum> getSubforums(){
 		if(subforums == null){
 			try {
@@ -299,6 +328,7 @@ public class DatabaseClass {
 				Repository.getInstance().setArticles(temp.getArticles());
 				Repository.getInstance().setVehicles(temp.getVehicles());
 				Repository.getInstance().setRestaurants(temp.getRestaurants());
+				Repository.getInstance().setOrders(temp.getOrders());
 				//users = temp;
 			}
 			

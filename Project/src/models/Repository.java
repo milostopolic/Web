@@ -27,6 +27,7 @@ public class Repository implements Serializable {
     private Map<String, Article> articles;
     private Map<String, Vehicle> vehicles;
     private Map<String, Restaurant> restaurants;
+    private Map<Integer, Order> orders;
     
 	public Map<String, User> getUsers() {
 		return users;
@@ -58,6 +59,14 @@ public class Repository implements Serializable {
 
 	public void setRestaurants(Map<String, Restaurant> restaurants) {
 		this.restaurants = restaurants;
+	}
+
+	public Map<Integer, Order> getOrders() {
+		return orders;
+	}
+
+	public void setOrders(Map<Integer, Order> orders) {
+		this.orders = orders;
 	}
 	
 }

@@ -12,14 +12,14 @@ public class Article implements Serializable {
 	private static final long serialVersionUID = 8081091158940735139L;
 	
 	private String name;
-	private String price;
+	private float price;
 	private String description;
 	private String quantity;
 	private ArticleType type;
 	private boolean deleted;
 	private List<String> restaurantsList;	
 	
-	public Article(String name, String price, String description, String quantity) {
+	public Article(String name, float price, String description, String quantity) {
 		super();
 		this.name = name;
 		this.price = price;
@@ -39,11 +39,11 @@ public class Article implements Serializable {
 		this.name = name;
 	}
 
-	public String getPrice() {
+	public float getPrice() {
 		return price;
 	}
 
-	public void setPrice(String price) {
+	public void setPrice(float price) {
 		this.price = price;
 	}
 

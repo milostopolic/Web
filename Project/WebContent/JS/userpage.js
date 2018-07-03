@@ -3,6 +3,8 @@ var loggeduser_url = "../Project/webapi/users/loggeduser"
 var logout_url = "../Project/webapi/users/logout"
 var getrestaurants_url = "../Project/webapi/users/favrestaurants"
 var fav_url = "../Project/webapi/users/favrestaurant"
+var ordersbyuser_url = "../Project/webapi/orders/ordersbyuser"
+var orders_url = "../Project/webapi/orders"
 var loggedUser
 
 
@@ -38,8 +40,9 @@ function loadNavbar() {
 				$("#dropID").append(`<a style="cursor:pointer" class="dropdown-item" onClick="vehiclesClick()">Vehicles</a>`);
 				$("#dropID").append(`<a style="cursor:pointer" class="dropdown-item" onClick="restaurantsClick()">Restaurants</a>`);
 				
-			} else {
+			} else if(data.role == 'CUSTOMER') {
 				$("#dropID").append(`<a class="dropdown-item" href="userpage.html">User page</a>`);
+				$("#dropID").append(`<a class="dropdown-item" id="cartClick" style="cursor:pointer" onclick="loadCart()" data-toggle="modal" data-target="#exampleModal">My cart</a>`);
 			}
 		},
 		error : function() {
@@ -66,7 +69,7 @@ $(document).on('click', '#fav-tab', function(){
 });
 
 $(document).on('click', '#orders-tab', function(){	
-	
+	loadOrders();
 });
 
 
@@ -107,10 +110,96 @@ function loadRestaurants() {
 	});
 }
 
+function loadOrders() {
+	$.ajax({
+		type : 'GET',
+		url : ordersbyuser_url,
+    contentType : 'application/json',
+		
+		success : function(data) {
+			
+			$("#cards").empty();
+			for(let i = 0; i < data.length; i++) {				
+								
+				$("#cards").append(`<div class="card" style="width: 18rem;margin-top:20px">
+					<div id="title`+i+`" class="card-body">
+					  <h5 class="card-title">`+ data[i].dateTime +`</h5>
+					  <h6 class="card-subtitle mb-2 text-muted">`+ data[i].status +`</h6>
+					  <p class="card-text">`+ data[i].totalPrice +` RSD</p>
+					  <a style="cursor:pointer;color:blue" id="`+data[i].id+`" class="card-link artClass">Order items</a>
+					  <!--a href="#" class="card-link">Another link</a-->
+					</div> 
+					</div>`);
+				
+				/*if(loggedUser != null) {
+					if(loggedUser.role == 'CUSTOMER') {
+						$("#title"+ i).append(`<img id="`+ data[i].name +`" class="float-right starClass" src="images/star.png"></img>`);
+					}
+				}*/
+					
+				
+				
+			}
+		},
+		error : function() {
+			
+		}
+	});
+}
+
 $(document).on('click', '.cardsClass', function(){
 	sessionStorage.setItem("restaurantDetails", $(this).attr("id"));
 	window.location.href="restaurant.html";
 });
+
+$(document).on('click', '.artClass', function(){
+	var id = $(this).attr('id');
+	$.ajax({
+		type : 'GET',
+		url : orders_url + "/getitems/" + id,
+		contentType : 'application/json',
+		
+		success : function(data) {
+			$('#exampleModal').modal('toggle');
+			$("#modal-title").empty();
+			$("#modal-title").append(`Order items`);
+			$("#modal-body").empty();
+			$("#modal-footer").empty();
+			if(data.length > 0) {
+				$("#modal-body").append(`<table class="table">
+				  <thead class="thead-light">
+				    <tr>
+				      <th scope="col">Article</th>
+				      <th scope="col">Unit price</th>
+				      <th scope="col">Quantity</th>
+				      <th scope="col">Restaurant</th>
+				    </tr>
+				  </thead>
+				  <tbody id="cartTable">
+				    
+				  </tbody>
+				</table>`);
+				for(let i = 0; i < data.length; i++) {
+					$("#cartTable").append(`<tr>
+					<th>`+ data[i].article +`</th><td>`+ data[i].price +`</td>
+					<td>` +data[i].quantity + `</td>
+					<td>` +data[i].restaurant + `</td>					
+					</tr>`);
+				}
+				
+			} else {
+				$("#modal-body").append(`<p>Order is empty.</p>`);
+			}
+			
+		},
+		error : function() {
+			
+		}
+	});
+	
+});
+
+
 
 /*$(document).on('click', '.starClass', function(){
 	var id = $(this).attr("id");
@@ -126,3 +215,123 @@ $(document).on('click', '.cardsClass', function(){
     		toastr.warning("Restaurant is already added to favourites.");
     	}});
 });*/
+
+function loadCart(){
+	$("#modal-title").empty();
+	$("#modal-title").append(`Cart`);
+	$("#modal-body").empty();
+	$("#modal-footer").empty();
+	if(loggedUser.cart.items.length > 0) {
+		$("#modal-body").append(`<table class="table">
+		  <thead class="thead-light">
+		    <tr>
+		      <th scope="col">Article</th>
+		      <th scope="col">Unit price</th>
+		      <th scope="col">Quantity</th>
+		      <th scope="col"></th>
+		    </tr>
+		  </thead>
+		  <tbody id="cartTable">
+		    
+		  </tbody>
+		</table>`);
+		for(let i = 0; i < loggedUser.cart.items.length; i++) {
+			$("#cartTable").append(`<tr>
+			<th>`+ loggedUser.cart.items[i].article +`</th><td>`+ loggedUser.cart.items[i].price +`</td>
+			<td><input style="max-width:50px" class="quant" id="` +loggedUser.cart.items[i].article + `" onkeydown="return false" min="1" max="10" type="number" value="`+loggedUser.cart.items[i].quantity +`"></td>
+			<td><img class="brisanje" id="` +loggedUser.cart.items[i].article + `" style="margin-left:5px; cursor:pointer" height="24" witdh="24" src="images/delete.png" alt="appropriate alternative text goes here"></td>
+			</tr>`);
+		}
+		$("#modal-body").append(`<p>Total price: `+ loggedUser.cart.totalPrice +`</p>`);
+		$("#modal-footer").append(`<input id="note" class="form-control mr-sm-2" type="text" placeholder="Note"/>`);
+		$("#modal-footer").append(`<button onclick="order()" class="btn btn-success">Order</button>`);
+		
+	} else {
+		$("#modal-body").append(`<p>Your cart is empty.</p>`);
+	}
+	
+	
+}
+
+
+
+$(document).on('click', '.brisanje', function() {
+	var id = ($(this).attr('id'));	
+	$.ajax({
+		type: 'DELETE',
+		url : "../Project/webapi/orders/deleteitem/"+id,
+		contentType : 'application/json',
+		success: function() {
+			$.ajax({
+				type : 'GET',
+				url : loggeduser_url,
+		    contentType : 'application/json',
+		    
+				success : function(data) {
+					loggedUser = data;
+					loadCart();
+				},
+				error: function() {
+					
+				}
+			});
+		},
+		error:function() {}
+	})
+});
+
+$(document).on('change', '.quant', function(){
+	var id = ($(this).attr('id'));
+	var q = ($(this).val());
+	console.log(q);	
+	$.ajax({
+		type: 'POST',
+		url: orders_url + "changequantity/" + id + "/" + q,
+		success: function() {
+			$.ajax({
+				type : 'GET',
+				url : loggeduser_url,
+		    contentType : 'application/json',
+		    
+				success : function(data) {
+					loggedUser = data;
+					loadCart();
+				},
+				error: function() {
+					
+				}
+			});
+			
+		},
+		error:function(){
+			
+		}
+	})
+	
+});
+
+function order() {
+	$.ajax({
+		type : 'POST',
+		url : orders_url,
+    contentType : 'application/json',
+		dataType : "json",
+    data:orderToJSON(),
+		success : function(data) {
+			alert("SUCCESS");
+			loadNavbar();
+			$('#exampleModal').modal('toggle');
+		},
+		error : function(XMLHttpRequest, textStatus, errorThrown) {
+			alert("ERROR");
+		}
+	});
+};
+
+function orderToJSON() {
+	return JSON.stringify({	
+    "note":$('#note').val(),
+    "items":loggedUser.cart.items,
+    "totalPrice":loggedUser.cart.totalPrice
+	});
+}

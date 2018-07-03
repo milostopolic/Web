@@ -1,6 +1,7 @@
 package models;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class Order implements Serializable{
 
@@ -9,12 +10,14 @@ public class Order implements Serializable{
 	 */
 	private static final long serialVersionUID = -5394164215348060960L;
 	
-	private Article item;
+	private List<OrderItem> items;
 	private String dateTime;
-	private User buyer;
-	private User deliverer;
+	private String buyer;
+	private String deliverer;
 	private OrderStatus status;
 	private String note;
+	private float totalPrice;
+	private int id;
 	
 	public Order() {
 		
@@ -22,19 +25,15 @@ public class Order implements Serializable{
 
 	public Order(Article item, String dateTime, User buyer, User deliverer, String note) {
 		super();
-		this.item = item;
-		this.dateTime = dateTime;
-		this.buyer = buyer;
-		this.deliverer = deliverer;
-		this.note = note;
+		
 	}
 
-	public Article getItem() {
-		return item;
+	public List<OrderItem> getItems() {
+		return items;
 	}
 
-	public void setItem(Article item) {
-		this.item = item;
+	public void setItems(List<OrderItem> items) {
+		this.items = items;
 	}
 
 	public String getDateTime() {
@@ -45,20 +44,28 @@ public class Order implements Serializable{
 		this.dateTime = dateTime;
 	}
 
-	public User getBuyer() {
+	public String getBuyer() {
 		return buyer;
 	}
 
-	public void setBuyer(User buyer) {
+	public void setBuyer(String buyer) {
 		this.buyer = buyer;
 	}
 
-	public User getDeliverer() {
+	public String getDeliverer() {
 		return deliverer;
 	}
 
-	public void setDeliverer(User deliverer) {
+	public void setDeliverer(String deliverer) {
 		this.deliverer = deliverer;
+	}
+
+	public OrderStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(OrderStatus status) {
+		this.status = status;
 	}
 
 	public String getNote() {
@@ -69,13 +76,23 @@ public class Order implements Serializable{
 		this.note = note;
 	}
 
-	public OrderStatus getStatus() {
-		return status;
+	public float getTotalPrice() {
+		return totalPrice;
 	}
 
-	public void setStatus(OrderStatus status) {
-		this.status = status;
+	public void setTotalPrice(float totalPrice) {
+		this.totalPrice = totalPrice;
 	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	
 	
 	
 

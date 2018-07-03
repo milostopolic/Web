@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import database.DatabaseClass;
+import models.Cart;
 import models.Repository;
 import models.Restaurant;
 import models.User;
@@ -23,6 +24,7 @@ public class UserService {
 				user.setRole(UserRole.CUSTOMER);
 				user.setDate(new SimpleDateFormat("dd-MM-yyyy").format(new Date()));	
 				user.setFavouriteRestaurants(new ArrayList<>());
+				user.setCart(new Cart());
 				Repository.getInstance().getUsers().put(user.getUsername(), user);
 				DatabaseClass.saveData(DatabaseClass.myRepositoryPath);
 				

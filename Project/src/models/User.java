@@ -19,6 +19,7 @@ public class User implements Serializable{
 	private String email;
 	private String date;
 	private List<String> favouriteRestaurants;
+	private Cart cart;
 	
 	/*public User(String username, String password, String name, String surname) {
 		super();
@@ -42,6 +43,7 @@ public class User implements Serializable{
 
 	public User() {
 		this.favouriteRestaurants = new ArrayList<>();
+		this.cart = new Cart();
 	}
 
 	public String getUsername() {
@@ -114,6 +116,14 @@ public class User implements Serializable{
 
 	public void setFavouriteRestaurants(List<String> favouriteRestaurants) {
 		this.favouriteRestaurants = favouriteRestaurants;
+	}
+
+	public Cart getCart() {
+		return cart;
+	}
+
+	public void setCart(Cart cart) {
+		this.cart = cart;
 	}
 	
 	
