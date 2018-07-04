@@ -3,8 +3,7 @@ var loggeduser_url = "../Project/webapi/users/loggeduser"
 var articleedit_url = "../Project/webapi/articles/articleedit"
 
 $(document).on("submit", "#articleeditForm", function(e) {
-	e.preventDefault();
-	alert("PORUKAA");
+	e.preventDefault();	
 	
 	$.ajax({
 		type : 'POST',
@@ -15,10 +14,11 @@ $(document).on("submit", "#articleeditForm", function(e) {
 		success : function(data) {
 			/*$("#paragraph").append(`Name je: ` +data.name);
 			$("#paragraph").append(` quantity je: ` +data.quantity);*/
+			toastr.success("Article edited.");
 			window.location.href="adminarticles.html";
 		},
 		error : function(XMLHttpRequest, textStatus, errorThrown) {
-			alert("AJAX ERROR: " + errorThrown+"register");
+			
 		}
 	});
 });
@@ -34,14 +34,14 @@ function formToJSON() {
 }
 
 function loadArticle() {
+	toastr.success("asdas");
 	var id = sessionStorage.getItem('editingArticle');
 	$.ajax({
 		type : 'GET',
 		url : "../Project/webapi/articles/"+id,
     contentType : 'application/json',
 		
-		success : function(data) {
-			alert("SUCCESS");
+		success : function(data) {			
 			console.log(data.username);
 			$('#name').val(data.name);
 			$('#price').val(data.price);
@@ -50,7 +50,7 @@ function loadArticle() {
 			$('#type').val(data.type);			
 		},
 		error : function(XMLHttpRequest, textStatus, errorThrown) {
-			alert("ERROR");
+			
 		}
 	});
 }

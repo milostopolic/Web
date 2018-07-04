@@ -318,12 +318,11 @@ function order() {
 		dataType : "json",
     data:orderToJSON(),
 		success : function(data) {
-			alert("SUCCESS");
+			toastr.success("Order placed.");
 			loadNavbar();
 			$('#exampleModal').modal('toggle');
 		},
 		error : function(XMLHttpRequest, textStatus, errorThrown) {
-			alert("ERROR");
 		}
 	});
 };

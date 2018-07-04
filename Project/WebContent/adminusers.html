@@ -6,12 +6,17 @@
 <script src="JS/jquery-3.3.1.min.js"></script>
     <script src="JS/bootstrap.min.js"></script>
     <script src="JS/adminusers.js"></script>       
+	<script src="JS/toastr.min.js"></script>
+    <script src="JS/toastr-options.js"></script>
+    <script src="JS/jquery-ui.js"></script>
 	<!-- script src="JS/useredit.js"></script-->
     <!-- Bootstrap core CSS -->
     <link href="CSS/bootstrap.min.css" rel="stylesheet">
+    <link href="CSS/toastr.min.css" rel="stylesheet">
+    <link href="CSS/jquery-ui.css" rel="stylesheet">
     <!-- link href="CSS/index.css" rel="stylesheet"-->
 </head>
-<body onLoad="loadNavbar();loadUsers()">
+<body onLoad="loadNavbar();loadUsers();setOptions()">
 <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>

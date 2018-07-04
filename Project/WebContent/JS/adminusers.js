@@ -107,7 +107,9 @@ $(document).on('change', '.selekcija', function(){
 		type: 'GET',
 		url : "../Project/webapi/users/changerole/"+selected+"/"+id,
 		contentType : 'application/json',
-		success: function() {},
+		success: function() {
+			toastr.success("Role changed.");
+		},
 		error:function() {}
 	})
 	

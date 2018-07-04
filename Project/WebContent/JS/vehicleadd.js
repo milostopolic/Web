@@ -4,7 +4,6 @@ var logout_url = "../Project/webapi/users/logout"
 
 $(document).on("submit", "#vehicleaddForm", function(e) {
 	e.preventDefault();
-	alert("PORUKAA");
 	
 	$.ajax({
 		type : 'POST',
@@ -13,12 +12,10 @@ $(document).on("submit", "#vehicleaddForm", function(e) {
 		dataType : "json",
     data:formToJSON(),
 		success : function(data) {
-			$("#paragraph").append(`Maker je: ` +data.maker);
-			$("#paragraph").append(` model je: ` +data.model);
+			toastr.success("Vehicle added.");
 			window.location.href="adminvehicles.html";
 		},
 		error : function(XMLHttpRequest, textStatus, errorThrown) {
-			alert("AJAX ERROR: " + errorThrown+"register");
 		}
 	});
 });

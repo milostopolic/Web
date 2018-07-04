@@ -6,12 +6,17 @@
 <script src="JS/jquery-3.3.1.min.js"></script>
     <script src="JS/bootstrap.min.js"></script>
     <script src="JS/deliveryorders.js"></script>       
+	<script src="JS/toastr.min.js"></script>
+    <script src="JS/toastr-options.js"></script>
+    <script src="JS/jquery-ui.js"></script>
 	<!-- script src="JS/useredit.js"></script-->
     <!-- Bootstrap core CSS -->
     <link href="CSS/bootstrap.min.css" rel="stylesheet">
+    <link href="CSS/toastr.min.css" rel="stylesheet">
+    <link href="CSS/jquery-ui.css" rel="stylesheet">
     <!-- link href="CSS/index.css" rel="stylesheet"-->
 </head>
-<body onLoad="loadNavbar()">
+<body onLoad="loadNavbar();setOptions()">
 <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -25,15 +30,36 @@
 <table class="table">
   <thead class="thead-light">
     <tr>
-      <th scope="col">Date & time</th>
+      <th scope="col">Date &amp; time</th>
       <th scope="col">Buyer</th>
       <th scope="col">Total price</th>
       <th scope="col">Note</th>
+      <th scope="col"></th>
     </tr>
   </thead>
   <tbody id="ordersTable">
     
   </tbody>
-</table>	
+</table>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Taking order</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="modal-body">
+        
+      </div>
+      <div class="modal-footer container" id="modal-footer">
+       
+      </div>
+    </div>
+  </div>
+</div>
+	
 </body>
 </html>

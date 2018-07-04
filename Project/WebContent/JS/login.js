@@ -18,12 +18,12 @@ $(document).on("submit", "#loginForm", function(e) {
     contentType : 'application/json',
 		dataType : "json",
     data:formToJSON(),
-		success : function(data) {
-			alert("SUCCESS");
+		success : function(data) {	
+			toastr.success("Successfully logged in.");
 			loadNavbar();
 		},
 		error : function(XMLHttpRequest, textStatus, errorThrown) {
-			alert("ERROR");
+			toastr.error("Invalid username/password.");
 		}
 	});
 });
@@ -309,7 +309,7 @@ function order() {
 		dataType : "json",
     data:orderToJSON(),
 		success : function(data) {
-			alert("SUCCESS");
+			toastr.success("Order placed.");
 			loadNavbar();
 			$('#exampleModal').modal('toggle');
 		},

@@ -115,6 +115,7 @@ $(document).on('click', '.brisanje', function() {
 		url : "../Project/webapi/restaurants/"+id,
 		contentType : 'application/json',
 		success: function() {
+			toastr.success("Restaurant deleted.");
 			loadRestaurants();
 		},
 		error:function() {}

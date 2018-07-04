@@ -20,6 +20,9 @@ public class User implements Serializable{
 	private String date;
 	private List<String> favouriteRestaurants;
 	private Cart cart;
+	private List<Integer> orders;
+	private String vehicle;
+	private int activeOrder;
 	
 	/*public User(String username, String password, String name, String surname) {
 		super();
@@ -44,6 +47,9 @@ public class User implements Serializable{
 	public User() {
 		this.favouriteRestaurants = new ArrayList<>();
 		this.cart = new Cart();
+		this.orders = new ArrayList<>();
+		this.vehicle = "";
+		this.activeOrder = -1;
 	}
 
 	public String getUsername() {
@@ -124,6 +130,30 @@ public class User implements Serializable{
 
 	public void setCart(Cart cart) {
 		this.cart = cart;
+	}
+
+	public List<Integer> getOrders() {
+		return orders;
+	}
+
+	public void setOrders(List<Integer> orders) {
+		this.orders = orders;
+	}
+
+	public String getVehicle() {
+		return vehicle;
+	}
+
+	public void setVehicle(String vehicle) {
+		this.vehicle = vehicle;
+	}
+
+	public int getActiveOrder() {
+		return activeOrder;
+	}
+
+	public void setActiveOrder(int activeOrder) {
+		this.activeOrder = activeOrder;
 	}
 	
 	

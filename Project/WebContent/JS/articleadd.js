@@ -7,8 +7,7 @@ var restaurants_url = "../Project/webapi/restaurants"
 var restorani=null;
 
 $(document).on("submit", "#articleaddForm", function(e) {
-	e.preventDefault();
-	alert("PORUKAA");	
+	e.preventDefault();		
 	$.ajax({
 		type : 'POST',
 		url : articleadd_url,
@@ -18,10 +17,11 @@ $(document).on("submit", "#articleaddForm", function(e) {
 		success : function(data) {
 			$("#paragraph").append(`Name je: ` +data.name);
 			$("#paragraph").append(` quantity je: ` +data.quantity);
+			toastr.success("Article added.");
 			window.location.href="adminarticles.html";
 		},
 		error : function(XMLHttpRequest, textStatus, errorThrown) {
-			alert("AJAX ERROR: " + errorThrown+"register");
+			
 		}
 	});
 });

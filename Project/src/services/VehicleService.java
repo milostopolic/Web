@@ -59,4 +59,16 @@ public class VehicleService {
 		return tempVehicles;
 	}
 	
+	public List<Vehicle> getFreeVehicles() {
+		List<Vehicle> allVeh = getAllVehicles();
+		List<Vehicle> tempVeh = new ArrayList<>();
+		for(Vehicle veh : allVeh) {
+			if(!veh.isUsed()) {
+				tempVeh.add(veh);
+			}
+		}
+		
+		return tempVeh;
+	}
+	
 }

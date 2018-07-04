@@ -2,7 +2,7 @@ var login_url = "../Project/webapi/users/login"
 var loggeduser_url = "../Project/webapi/users/loggeduser"
 var logout_url = "../Project/webapi/users/logout"
 var restaurants_url = "../Project/webapi/restaurants"
-	
+var orders_url = "../Project/webapi/orders"
 var ordersCart_url = "../Project/webapi/orders/cart"
 var loggedUser
 
@@ -16,12 +16,12 @@ $(document).on("submit", "#loginForm", function(e) {
 		dataType : "json",
     data:formToJSON(),
 		success : function(data) {
-			alert("SUCCESS");
+			toastr.success("Successfully logged in.");
 			loadNavbar();
 			loadRestaurant();
 		},
 		error : function(XMLHttpRequest, textStatus, errorThrown) {
-			alert("ERROR");
+			toastr.error("Invalid username/password");
 		}
 	});
 });
@@ -66,6 +66,8 @@ function loadNavbar() {
 			} else if(data.role == 'CUSTOMER') {
 				$("#dropID").append(`<a class="dropdown-item" href="userpage.html">User page</a>`);
 				$("#dropID").append(`<a class="dropdown-item" id="cartClick" style="cursor:pointer" onclick="loadCart()" data-toggle="modal" data-target="#exampleModal">My cart</a>`);
+			} else if(data.role == 'DELIVERY') {
+				$("#dropID").append(`<a class="dropdown-item" href="deliveryorders.html">Orders</a>`);
 			}
 		},
 		error : function(XMLHttpRequest, textStatus, errorThrown) {
@@ -197,12 +199,12 @@ $(document).on('click', '.cartClass', function() {
     	}),
     
 		success : function(data) {
-			alert("SUCCESS");
+			toastr.success("Added to cart.");
 			loadNavbar()
 			
 		},
 		error : function(XMLHttpRequest, textStatus, errorThrown) {
-			alert("ERROR");
+			toastr.warn("Already added to cart.");
 		}
 	});
 });
@@ -273,7 +275,7 @@ $(document).on('change', '.quant', function(){
 	console.log(q);	
 	$.ajax({
 		type: 'POST',
-		url: orders_url + "changequantity/" + id + "/" + q,
+		url: orders_url + "/changequantity/" + id + "/" + q,
 		success: function() {
 			$.ajax({
 				type : 'GET',
@@ -305,12 +307,11 @@ function order() {
 		dataType : "json",
     data:orderToJSON(),
 		success : function(data) {
-			alert("SUCCESS");
+			toastr.success("Order placed.");
 			loadNavbar();
 			$('#exampleModal').modal('toggle');
 		},
 		error : function(XMLHttpRequest, textStatus, errorThrown) {
-			alert("ERROR");
 		}
 	});
 };

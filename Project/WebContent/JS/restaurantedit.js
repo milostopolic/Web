@@ -4,7 +4,6 @@ var restaurantedit_url = "../Project/webapi/restaurants/restaurantedit"
 
 $(document).on("submit", "#restauranteditForm", function(e) {
 	e.preventDefault();
-	alert("PORUKAA");
 	
 	$.ajax({
 		type : 'POST',
@@ -13,12 +12,10 @@ $(document).on("submit", "#restauranteditForm", function(e) {
 		dataType : "json",
     data:formToJSON(),
 		success : function(data) {
-			/*$("#paragraph").append(`Name je: ` +data.name);
-			$("#paragraph").append(` quantity je: ` +data.quantity);*/
+			toastr.success("Restaurant edited.");
 			window.location.href="adminrestaurants.html";
 		},
 		error : function(XMLHttpRequest, textStatus, errorThrown) {
-			alert("AJAX ERROR: " + errorThrown+"register");
 		}
 	});
 });
@@ -39,14 +36,12 @@ function loadRestaurant() {
     contentType : 'application/json',
 		
 		success : function(data) {
-			alert("SUCCESS");
 			console.log(data.model);
 			$('#name').val(data.name);
 			$('#address').val(data.address);
 			$('#category').val(data.category);			
 		},
 		error : function(XMLHttpRequest, textStatus, errorThrown) {
-			alert("ERROR");
 		}
 	});
 }

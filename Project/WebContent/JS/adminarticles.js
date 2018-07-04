@@ -132,6 +132,7 @@ $(document).on('click', '.brisanje', function() {
 		url : "../Project/webapi/articles/"+id,
 		contentType : 'application/json',
 		success: function() {
+			toastr.success("Article deleted.");
 			loadArticles();
 		},
 		error:function() {}

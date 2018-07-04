@@ -4,7 +4,6 @@ var login_url = "../Project/webapi/users/login"
 
 $(document).on("submit", "#registrationForm", function(e) {
 	e.preventDefault();
-	alert("PORUKAA");
 	
 	$.ajax({
 		type : 'POST',
@@ -16,10 +15,10 @@ $(document).on("submit", "#registrationForm", function(e) {
 			console.log(data.username);
 			console.log(data.name);
 			console.log(data.contact);
+			toastr.success("Successfully registered.");
 			window.location.href="mainpage.html";
 		},
 		error : function(XMLHttpRequest, textStatus, errorThrown) {
-			alert("AJAX ERROR: " + errorThrown+"register");
 		}
 	});
 });
@@ -69,11 +68,11 @@ $(document).on("submit", "#loginForm", function(e) {
 		dataType : "json",
     data:formToJSONLog(),
 		success : function(data) {
-			alert("SUCCESS");
+			toastr.success("Successfully logged in.");
 			window.location.href="mainpage.html";
 		},
 		error : function(XMLHttpRequest, textStatus, errorThrown) {
-			alert("ERROR");
+			toastr.error("Invalid username/password.");
 		}
 	});
 });

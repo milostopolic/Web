@@ -134,5 +134,50 @@ public class OrderResource {
 		}
 		return Response.status(Response.Status.BAD_REQUEST).build();
 	}
+	
+	@POST
+	@Path("/takeorder/{id}/{veh}")
+	public Response takeOrder(@Context HttpServletRequest request, @PathParam("id") int id, @PathParam("veh") String veh) {
+		User tempUser = (User) request.getSession().getAttribute("loggedUser");
+		if(tempUser != null) {
+			Order tempOrder = orderService.takeOrder(id, veh, tempUser);
+			if(tempOrder == null) {
+				return Response.status(Response.Status.BAD_REQUEST).build();
+			} else {
+				return Response.ok(tempOrder, MediaType.APPLICATION_JSON).build();
+			}
+		}
+		return Response.status(Response.Status.BAD_REQUEST).build();
+	}
+	
+	@GET
+	@Path("/activeorder")
+	public Response getActiveOrder(@Context HttpServletRequest request) {
+		User tempUser = (User) request.getSession().getAttribute("loggedUser");
+		if(tempUser != null) {
+			Order tempOrder = orderService.getActiveOrder(tempUser);
+			if(tempOrder == null) {
+				return Response.status(Response.Status.BAD_REQUEST).build();
+			} else {
+				return Response.ok(tempOrder, MediaType.APPLICATION_JSON).build();
+			}
+		}
+		return Response.status(Response.Status.BAD_REQUEST).build();
+	}
+	
+	@POST
+	@Path("/deliverorder")
+	public Response deliverOrder(@Context HttpServletRequest request) {
+		User tempUser = (User) request.getSession().getAttribute("loggedUser");
+		if(tempUser != null) {
+			Order tempOrder = orderService.deliverOrder(tempUser);
+			if(tempOrder == null) {
+				return Response.status(Response.Status.BAD_REQUEST).build();
+			} else {
+				return Response.ok(tempOrder, MediaType.APPLICATION_JSON).build();
+			}
+		}
+		return Response.status(Response.Status.BAD_REQUEST).build();
+	}
 
 }

@@ -14,11 +14,14 @@ import models.OrderItem;
 import models.OrderStatus;
 import models.Repository;
 import models.User;
+import models.UserRole;
+import models.Vehicle;
 
 public class OrderService {
 	
 	private Map<Integer, Order> orders = DatabaseClass.getOrders();
 	private Map<String, Article> articles = DatabaseClass.getArticles();
+	private Map<String, Vehicle> vehicles = DatabaseClass.getVehicles();
 	
 	public OrderItem addToCart(OrderItem ordIt, User user) {
 		boolean flag = false;
@@ -147,6 +150,50 @@ public class OrderService {
 		}
 		
 		return tempOrders;
+	}
+	
+	
+	public Order takeOrder(int id, String veh, User user) {
+		if(!orders.containsKey(id))
+			return null;
+		if(!vehicles.containsKey(veh))
+			return null;
+		if(user.getRole() != UserRole.DELIVERY)
+			return null;
+		
+		orders.get(id).setStatus(OrderStatus.BEINGDELIVERED);
+		vehicles.get(veh).setUsed(true);
+		user.getOrders().add(id);
+		user.setVehicle(veh);
+		user.setActiveOrder(id);
+		
+		DatabaseClass.saveData(DatabaseClass.myRepositoryPath);
+		return orders.get(id);
+	}
+	
+	public Order getActiveOrder(User user) {
+		if(user.getRole() != UserRole.DELIVERY)
+			return null;
+		if(!orders.containsKey(user.getActiveOrder()))
+			return null;
+		
+		return orders.get(user.getActiveOrder());
+	}
+	
+	public Order deliverOrder(User user) {
+		if(user.getRole() != UserRole.DELIVERY)
+			return null;
+		if(!orders.containsKey(user.getActiveOrder()))
+			return null;
+		
+		Order tempOrder = orders.get(user.getActiveOrder());
+		tempOrder.setStatus(OrderStatus.DELIVERED);
+		Vehicle tempVehicle = vehicles.get(user.getVehicle());
+		tempVehicle.setUsed(false);
+		user.setActiveOrder(-1);
+		user.setVehicle("");
+		
+		return tempOrder;
 	}
 
 }

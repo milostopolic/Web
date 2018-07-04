@@ -66,4 +66,14 @@ public class VehicleResource {
 		return Response.ok(tempVehicles, MediaType.APPLICATION_JSON).build();
 	}
 	
+	@GET
+	@Path("/freevehicles")
+	public Response getFreeVehicles() {
+		List<Vehicle> tempVehicles = vehicleService.getFreeVehicles();
+		if(tempVehicles == null) {
+			return Response.status(Response.Status.BAD_REQUEST).build();
+		}
+		return Response.ok(tempVehicles, MediaType.APPLICATION_JSON).build();
+	}
+	
 }

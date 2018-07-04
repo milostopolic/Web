@@ -4,7 +4,6 @@ var vehicleedit_url = "../Project/webapi/vehicles/vehicleedit"
 
 $(document).on("submit", "#vehicleeditForm", function(e) {
 	e.preventDefault();
-	alert("PORUKAA");
 	
 	$.ajax({
 		type : 'POST',
@@ -13,12 +12,10 @@ $(document).on("submit", "#vehicleeditForm", function(e) {
 		dataType : "json",
     data:formToJSON(),
 		success : function(data) {
-			/*$("#paragraph").append(`Name je: ` +data.name);
-			$("#paragraph").append(` quantity je: ` +data.quantity);*/
+			toastr.success("Vehicle edited.");
 			window.location.href="adminvehicles.html";
 		},
 		error : function(XMLHttpRequest, textStatus, errorThrown) {
-			alert("AJAX ERROR: " + errorThrown+"register");
 		}
 	});
 });
@@ -42,7 +39,6 @@ function loadVehicle() {
     contentType : 'application/json',
 		
 		success : function(data) {
-			alert("SUCCESS");
 			console.log(data.model);
 			$('#maker').val(data.maker);
 			$('#model').val(data.model);
@@ -52,7 +48,6 @@ function loadVehicle() {
 			$('#note').val(data.note);
 		},
 		error : function(XMLHttpRequest, textStatus, errorThrown) {
-			alert("ERROR");
 		}
 	});
 }

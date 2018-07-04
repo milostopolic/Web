@@ -2,6 +2,7 @@ var users_url = "../Project/webapi/users"
 var loggeduser_url = "../Project/webapi/users/loggeduser"
 var logout_url = "../Project/webapi/users/logout"
 var orders_url = "../Project/webapi/orders"
+var loggedUser
 
 function formToJSON() {
 	return JSON.stringify({	
@@ -18,6 +19,7 @@ function loadNavbar() {
 		
 		success : function(data) {
 			console.log(data.role);
+			loggedUser = data;
 			if(data.role != 'DELIVERY') {
 				window.location.href="mainpage.html";
 			}
@@ -81,40 +83,109 @@ function restaurantsClick() {
 }
 
 function loadOrders() {
-	$.ajax({
-		type : 'GET',
-		url : orders_url + "/getordersfordelivery",
-    contentType : 'application/json',
-    	success: function(data){
-    		$("#ordersTable").empty();    		
-    		for(let i = 0; i < data.length; i++){    			
-    			$("#ordersTable").append(`<tr><th>` + data[i].dateTime + `</th>
-    			<td>`+ data[i].buyer +`</td>
-    			<td>`+ data[i].totalPrice +`</td>
-    			<td>`+ data[i].note +`</td>
-    			<!--td><select id="`+data[i].username+`" class="form-control selekcija"><option value="CUSTOMER">CUSTOMER</option>
-    			<option value="DELIVERY">DELIVERY</option>
-    			<option value="ADMIN">ADMIN</option></select></td--></tr>`);
-    			/*$('#'+data[i].username+' option:contains('+data[i].role+')').prop('selected',true);
-    			if(data[i].role == 'ADMIN') {    				
-    				$('#' +data[i].username).attr('disabled', 'disabled');
-    			}*/
-    		}
-    	},     	
-    	error: function(){
-    		
-    	}});
+	if(loggedUser.vehicle == '') {
+		$.ajax({
+			type : 'GET',
+			url : orders_url + "/getordersfordelivery",
+	    contentType : 'application/json',
+	    	success: function(data){
+	    		$("#ordersTable").empty();    		
+	    		for(let i = 0; i < data.length; i++){    			
+	    			$("#ordersTable").append(`<tr><th>` + data[i].dateTime + `</th>
+	    			<td>`+ data[i].buyer +`</td>
+	    			<td>`+ data[i].totalPrice +` RSD</td>
+	    			<td>`+ data[i].note +`</td>
+	    			<td><button class="btn btn-success preuzimanje" id="`+data[i].id+`">Take order</button></td>
+	    			</tr>`);    			
+	    		}    		
+	    	},     	
+	    	error: function(){
+	    		
+	    	}});
+	} else {
+		$.ajax({
+			type: 'GET',
+			url: orders_url + "/activeorder",
+			contentType : 'application/json',
+			success: function(data) {
+				$("#ordersTable").empty();    		
+	    		    			
+    			$("#ordersTable").append(`<tr><th>` + data.dateTime + `</th>
+    			<td>`+ data.buyer +`</td>
+    			<td>`+ data.totalPrice +` RSD</td>
+    			<td>`+ data.note +`</td>
+    			<td><button class="btn btn-success dostavljanje" id="`+data.id+`">Deliver</button></td>
+    			</tr>`);    			
+	    		   		
+			},
+			error: function() {}
+		});
+	}
 }
 
-$(document).on('change', '.selekcija', function(){
-	var id = ($(this).attr('id'));
-	var selected = $(this).val();
+$(document).on('click', '.dostavljanje', function() {
+	
 	$.ajax({
-		type: 'GET',
-		url : "../Project/webapi/users/changerole/"+selected+"/"+id,
+		type: 'POST',
+		url: orders_url + "/deliverorder",
 		contentType : 'application/json',
-		success: function() {},
-		error:function() {}
+		success: function(data) {
+			toastr.success("Order delivered");
+			loadNavbar();    		   		
+		},
+		error: function() {}
 	})
 	
 });
+
+
+
+$(document).on('click', '.preuzimanje', function(){
+	var id = ($(this).attr('id'));
+	console.log(id);
+	$('#exampleModal').modal('toggle');
+	$('#modal-body').empty();
+	$('#modal-footer').empty();	
+	
+	$.ajax({
+		type: 'GET',
+		url : "../Project/webapi/vehicles/freevehicles/",
+		contentType : 'application/json',
+		success: function(data) {
+			if(data.length > 0) {
+				$('#modal-body').append(`<p>Take vehicle: </p>
+				<select class="form-control selektovanje">`);
+				for(let i = 0; i < data.length; i++) {
+					$('.selektovanje').append(`<option value="`+ data[i].model +`">`+ data[i].maker + ` ` + data[i].model + `</option>`);
+				}
+				$('#modal-body').append(`</select>`);
+				
+				$('#modal-footer').append(`<button class="btn btn-success confirmBtn" id="`+ id +`">Confirm</button>`);	
+			} else {
+				$('#modal-body').append(`<p>No free vehicles.</p>`);
+			}
+		},
+		error:function() {}
+	})	
+});
+
+$(document).on('click', ".confirmBtn", function(){
+	var veh = $(".selektovanje").val();
+	var id = $(this).attr('id');
+	/*console.log(veh);
+	console.log(id);*/
+	
+	$.ajax({
+		type: 'POST',
+		url: "../Project/webapi/orders/takeorder/" + id + "/" + veh,
+		contentType : 'application/json',
+		success: function() {
+			$('#exampleModal').modal('toggle');
+			toastr.success("Order taken.");
+			loadNavbar();
+		},
+		error: function() {}
+	});
+});
+
+

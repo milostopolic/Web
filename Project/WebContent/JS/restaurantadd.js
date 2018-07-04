@@ -5,7 +5,6 @@ var logout_url = "../Project/webapi/users/logout"
 
 $(document).on("submit", "#restaurantaddForm", function(e) {
 	e.preventDefault();
-	alert("PORUKAA");
 	
 	$.ajax({
 		type : 'POST',
@@ -14,12 +13,10 @@ $(document).on("submit", "#restaurantaddForm", function(e) {
 		dataType : "json",
     data:formToJSON(),
 		success : function(data) {
-			$("#paragraph").append(`Name je: ` +data.name);
-			$("#paragraph").append(` quantity je: ` +data.quantity);
+			toastr.success("Restaurant added.");			
 			window.location.href="adminrestaurants.html";
 		},
 		error : function(XMLHttpRequest, textStatus, errorThrown) {
-			alert("AJAX ERROR: " + errorThrown+"register");
 		}
 	});
 });

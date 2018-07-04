@@ -118,6 +118,7 @@ $(document).on('click', '.brisanje', function() {
 		url : "../Project/webapi/vehicles/"+id,
 		contentType : 'application/json',
 		success: function() {
+			toastr.success("Vehicle deleted.");
 			loadVehicles();
 		},
 		error:function() {}
