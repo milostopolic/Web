@@ -20,9 +20,9 @@ public class ArticleService {
 				System.out.println(Repository.getInstance().getArticles());
 				article.setDeleted(false);
 				Repository.getInstance().getArticles().put(article.getName(), article);
-				for(String res : article.getRestaurantsList()) {
-					restaurants.get(res).getArticlesList().add(article.getName());
-				}
+				
+				restaurants.get(article.getRestaurant()).getArticlesList().add(article.getName());
+				
 				DatabaseClass.saveData(DatabaseClass.myRepositoryPath);
 				return article;
 			}

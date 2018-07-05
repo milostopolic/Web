@@ -15,8 +15,7 @@ $(document).on("submit", "#articleaddForm", function(e) {
 		dataType : "json",
     data:formToJSON(),
 		success : function(data) {
-			$("#paragraph").append(`Name je: ` +data.name);
-			$("#paragraph").append(` quantity je: ` +data.quantity);
+			
 			toastr.success("Article added.");
 			window.location.href="adminarticles.html";
 		},
@@ -28,18 +27,14 @@ $(document).on("submit", "#articleaddForm", function(e) {
 
 function formToJSON() {
 	var arrayOfObjects = [];
-	for(restoran of restorani) {		
-		if(document.getElementById(restoran.name).checked) {			
-			arrayOfObjects.push(restoran.name);
-		}
-	}
+	
 	return JSON.stringify({	
     "name":$('#name').val(),
     "price":$('#price').val(),
     "description":$('#description').val(),
 	"quantity":$('#quantity').val(),
 	"type":$('#type').val(),
-	"restaurantsList":arrayOfObjects
+	"restaurant":$('#restaurants').val()
 	});
 }
 
@@ -118,12 +113,9 @@ function loadRestaurants() {
 		
 		success : function(data) {
 			restorani = data;
-			$("#checkboxID").empty();
+			$("#restaurants").empty();
 			for(var i = 0; i < data.length; i++) {
-				$("#checkboxID").append(`<div class="form-check">
-					  <input id="`+data[i].name+`" class="form-check-input" type="checkbox" value="`+data[i].name+`">
-					  <label class="form-check-label" for="defaultCheck1">`+data[i].name+`</label>
-					</div>`);
+				$("#restaurants").append(`<option value="`+data[i].name+`">`+data[i].name+`</option>`);
 			}
 			
 		},

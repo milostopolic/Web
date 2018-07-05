@@ -17,7 +17,7 @@ public class Article implements Serializable {
 	private String quantity;
 	private ArticleType type;
 	private boolean deleted;
-	private List<String> restaurantsList;	
+	private String restaurant;	
 	
 	public Article(String name, float price, String description, String quantity) {
 		super();
@@ -79,13 +79,15 @@ public class Article implements Serializable {
 		this.deleted = deleted;
 	}
 
-	public List<String> getRestaurantsList() {
-		return restaurantsList;
+	public String getRestaurant() {
+		return restaurant;
 	}
 
-	public void setRestaurantsList(List<String> restaurantsList) {
-		this.restaurantsList = restaurantsList;
+	public void setRestaurant(String restaurant) {
+		this.restaurant = restaurant;
 	}
+
+	
 	
 	
 

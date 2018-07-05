@@ -194,8 +194,8 @@ $(document).on('click', '.cartClass', function() {
 		url : ordersCart_url,
     contentType : 'application/json',
     data:JSON.stringify({	
-        "article":id,
-        "restaurant": sessionStorage.getItem('restaurantDetails')   
+        "article":id
+        /*"restaurant": sessionStorage.getItem('restaurantDetails')  */ 
     	}),
     
 		success : function(data) {

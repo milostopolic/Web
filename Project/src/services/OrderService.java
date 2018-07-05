@@ -47,6 +47,7 @@ public class OrderService {
 				//newOI.setArticle(art);
 				ordIt.setPrice(tempArt.getPrice());
 				ordIt.setQuantity(1);
+				ordIt.setRestaurant(articles.get(ordIt.getArticle()).getRestaurant());
 				user.getCart().getItems().add(ordIt);
 				user.getCart().setTotalPrice(updateTotalPrice(user.getCart()));
 				DatabaseClass.saveData(DatabaseClass.myRepositoryPath);
