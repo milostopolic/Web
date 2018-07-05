@@ -68,4 +68,14 @@ public class ArticleResource {
 		}
 		return Response.ok(tempArticles, MediaType.APPLICATION_JSON).build();
 	}
+	
+	@GET
+	@Path("/getarticlesbypopularity")
+	public Response getArticlesByPopularity() {
+		List<Article> tempArticles = articleService.getArticlesByPopularity();
+		if(tempArticles == null) {
+			return Response.status(Response.Status.BAD_REQUEST).build(); 
+		}
+		return Response.ok(tempArticles, MediaType.APPLICATION_JSON).build();
+	}
 }

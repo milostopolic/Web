@@ -111,6 +111,10 @@ public class OrderService {
 		order.setStatus(OrderStatus.ORDERED);
 		order.setDateTime(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date()));
 		order.setId(Repository.getInstance().getOrders().size());
+		for(OrderItem oi : order.getItems()) {
+			Article tempArticle = articles.get(oi.getArticle());
+			tempArticle.setPopularity(tempArticle.getPopularity() + 1);
+		}
 		Repository.getInstance().getOrders().put(order.getId(), order);
 		
 		user.setCart(new Cart());

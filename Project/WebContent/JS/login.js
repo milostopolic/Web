@@ -4,6 +4,7 @@ var logout_url = "../Project/webapi/users/logout"
 var restaurants_url = "../Project/webapi/restaurants"
 var fav_url = "../Project/webapi/users/favrestaurant"
 var orders_url = "../Project/webapi/orders/"
+var ordersCart_url = "../Project/webapi/orders/cart"
 var loggedUser
 var searchSource = new Array()
 
@@ -43,7 +44,8 @@ function loadNavbar() {
     
 		success : function(data) {
 			loggedUser = data;
-			loadRestaurants('DOMESTIC');
+			//loadRestaurants('DOMESTIC');
+			loadPopularArticles();
 			console.log(data.role);
 			$("#navbarTogglerDemo03").empty();
 			//$("#navbarTogglerDemo03").append(`<input class="search" type="text"/><button class="searchBtn">Search</button>`);
@@ -62,12 +64,13 @@ function loadNavbar() {
 				    </ul>`);
 			if(data.role == 'ADMIN'){
 				//$("#listaID").append(`<li class="nav-item"><button class="btn btn-outline-success my-2 my-sm-0" onClick="usersClick()">Users</button></li>`)
-				$("#dropID").append(`<a style="cursor:pointer" class="dropdown-item" onClick="usersClick()">Users</a>`);
-				$("#dropID").append(`<a style="cursor:pointer" class="dropdown-item" onClick="articlesClick()">Articles</a>`);
-				$("#dropID").append(`<a style="cursor:pointer" class="dropdown-item" onClick="vehiclesClick()">Vehicles</a>`);
-				$("#dropID").append(`<a style="cursor:pointer" class="dropdown-item" onClick="restaurantsClick()">Restaurants</a>`);
-				$("#dropID").append(`<a style="cursor:pointer" class="dropdown-item" onClick="ordersClick()">Orders</a>`);
-				
+				$("#dropID").append(`<a href="adminusers.html" style="cursor:pointer" class="dropdown-item">Users</a>`);
+				$("#dropID").append(`<a href="adminarticles.html" style="cursor:pointer" class="dropdown-item">Articles</a>`);
+				$("#dropID").append(`<a href="adminvehicles.html" style="cursor:pointer" class="dropdown-item">Vehicles</a>`);
+				$("#dropID").append(`<a href="adminrestaurants.html" style="cursor:pointer" class="dropdown-item">Restaurants</a>`);
+				$("#dropID").append(`<a href="adminorders.html" style="cursor:pointer" class="dropdown-item">Orders</a>`);
+				$("#dropID").append(`<div class="dropdown-divider"></div>`);
+				$("#dropID").append(`<a style="cursor:pointer" class="dropdown-item" onClick="adminCartClick()">Admin cart</a>`);
 			} else if(data.role == 'CUSTOMER') {
 				$("#dropID").append(`<a class="dropdown-item" href="userpage.html">User page</a>`);
 				$("#dropID").append(`<a class="dropdown-item" id="cartClick" style="cursor:pointer" onclick="loadCart()" data-toggle="modal" data-target="#exampleModal">My cart</a>`);
@@ -76,6 +79,7 @@ function loadNavbar() {
 			}
 		},
 		error : function(XMLHttpRequest, textStatus, errorThrown) {
+			loggedUser = null;
 			$("#navbarTogglerDemo03").empty();
 			//$("#navbarTogglerDemo03").append(`<input class="search" type="text"/><button class="searchBtn">Search</button>`);
 			$("#navbarTogglerDemo03").append(`<ul class="navbar-nav mr-auto mt-2 mt-lg-0">      
@@ -88,7 +92,8 @@ function loadNavbar() {
       <input class="form-control mr-sm-2" type="password" placeholder="Password" aria-label="Password" id="password">
       <input class="btn btn-outline-success my-2 my-sm-0" type="submit" value="Log in"></input>
     </form>`);
-			loadRestaurants('DOMESTIC');
+			//loadRestaurants('DOMESTIC');
+			loadPopularArticles();
 		}
 	});
 }
@@ -130,22 +135,10 @@ $(document).on('click', '#pizzeria-tab', function(){
 	loadRestaurants("PIZZERIA");
 });
 
-function usersClick() {
-	window.location.href="adminusers.html";
-}
-function articlesClick() {
-	window.location.href="adminarticles.html";
-}
-function vehiclesClick() {
-	window.location.href="adminvehicles.html";
-}
-function restaurantsClick() {
-	window.location.href="adminrestaurants.html";
-}
+$(document).on('click', '#mostpopular-tab', function(){	
+	loadPopularArticles();
+});
 
-function ordersClick() {
-	window.location.href="adminorders.html";
-}
 
 function loadRestaurants(category) {
 	searchSource = [];
@@ -156,6 +149,7 @@ function loadRestaurants(category) {
 		
 		success : function(data) {
 			
+			$("#pop").empty();
 			$("#cards").empty();
 			for(let i = 0; i < data.length; i++) {	
 				searchSource.push(data[i].name);
@@ -331,3 +325,97 @@ function orderToJSON() {
     "totalPrice":loggedUser.cart.totalPrice
 	});
 }
+
+function loadPopularArticles(){
+	$("#pop").empty();
+	$("#cards").empty();
+	$("#myTab>li>a.active").removeClass("active");
+	$("#mostpopular-tab").addClass("active");
+	$.ajax({
+		type: 'GET',
+		url: "../Project/webapi/articles/getarticlesbypopularity",
+		contentType : 'application/json',
+		success: function(data) {
+			var limit;
+			if(data.length < 10) {
+				limit = data.length;
+			} else {
+				limit = 10;
+			}
+			
+			$("#pop").append(`<table class="table table-striped">
+								  <thead>
+								    <tr>
+								      <th scope="col">#</th>
+								      <th scope="col">Article</th>
+								      <th scope="col">Price</th>
+								      <th scope="col">Restaurant</th>
+								      <th scope="col">Times ordered</th>
+								      <th scope="col"></th>
+								    </tr>
+								  </thead>
+								  <tbody id="poptable">
+								  </tbody>`);
+			for(let i = 0; i < limit; i++) {
+				let j = i+1;
+				
+				if(loggedUser != null) {
+					if(loggedUser.role == 'CUSTOMER') {
+						$("#poptable").append(`<tr>
+								<td>`+j+`</td>
+								<td>`+data[i].name+`</td>
+								<td>`+data[i].price+`</td>
+								<td>`+data[i].restaurant+`</td>
+								<td>`+data[i].popularity+`</td>
+								<td><img style="cursor:pointer" id="`+ data[i].name +`" class="korpice"  src="images/cart.png"></img></td>				
+								</tr>`);
+					} else {
+						$("#poptable").append(`<tr>
+								<td>`+j+`</td>
+								<td>`+data[i].name+`</td>
+								<td>`+data[i].price+`</td>
+								<td>`+data[i].restaurant+`</td>
+								<td>`+data[i].popularity+`</td>
+								</tr>`);
+					}
+				} else {
+					$("#poptable").append(`<tr>
+							<td>`+j+`</td>
+							<td>`+data[i].name+`</td>
+							<td>`+data[i].price+`</td>
+							<td>`+data[i].restaurant+`</td>
+							<td>`+data[i].popularity+`</td>
+							</tr>`);
+				}
+				
+				
+			}
+			
+		},
+		error: function() {}
+		
+	});	
+}
+
+$(document).on('click', '.korpice', function() {
+	var id = $(this).attr("id");
+	$.ajax({
+		type : 'POST',
+		url : ordersCart_url,
+    contentType : 'application/json',
+    data:JSON.stringify({	
+        "article":id
+        /*"restaurant": sessionStorage.getItem('restaurantDetails')  */ 
+    	}),
+    
+		success : function(data) {
+			toastr.success("Added to cart.");
+			loadNavbar()
+			
+		},
+		error : function(XMLHttpRequest, textStatus, errorThrown) {
+			toastr.warn("Already added to cart.");
+		}
+	});
+});
+

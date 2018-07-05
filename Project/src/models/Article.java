@@ -17,7 +17,8 @@ public class Article implements Serializable {
 	private String quantity;
 	private ArticleType type;
 	private boolean deleted;
-	private String restaurant;	
+	private String restaurant;
+	private int popularity;
 	
 	public Article(String name, float price, String description, String quantity) {
 		super();
@@ -28,7 +29,8 @@ public class Article implements Serializable {
 	}
 	
 	public Article() {
-		
+		this.popularity = 0;
+		this.deleted = false;
 	}
 
 	public String getName() {
@@ -85,6 +87,14 @@ public class Article implements Serializable {
 
 	public void setRestaurant(String restaurant) {
 		this.restaurant = restaurant;
+	}
+
+	public int getPopularity() {
+		return popularity;
+	}
+
+	public void setPopularity(int popularity) {
+		this.popularity = popularity;
 	}
 
 	

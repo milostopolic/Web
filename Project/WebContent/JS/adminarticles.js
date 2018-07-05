@@ -36,10 +36,11 @@ function loadNavbar() {
 				      </li>			      
 				    </ul>`);
 			if(data.role === 'ADMIN'){
-				$("#dropID").append(`<a style="cursor:pointer" class="dropdown-item" onClick="usersClick()">Users</a>`);
-				$("#dropID").append(`<a style="cursor:pointer" class="dropdown-item" onClick="articlesClick()">Articles</a>`);
-				$("#dropID").append(`<a style="cursor:pointer" class="dropdown-item" onClick="vehiclesClick()">Vehicles</a>`);
-				$("#dropID").append(`<a style="cursor:pointer" class="dropdown-item" onClick="restaurantsClick()">Restaurants</a>`);
+				$("#dropID").append(`<a href="adminusers.html" style="cursor:pointer" class="dropdown-item">Users</a>`);
+				$("#dropID").append(`<a href="adminarticles.html" style="cursor:pointer" class="dropdown-item">Articles</a>`);
+				$("#dropID").append(`<a href="adminvehicles.html" style="cursor:pointer" class="dropdown-item">Vehicles</a>`);
+				$("#dropID").append(`<a href="adminrestaurants.html" style="cursor:pointer" class="dropdown-item">Restaurants</a>`);
+				$("#dropID").append(`<a href="adminorders.html" style="cursor:pointer" class="dropdown-item">Orders</a>`);
 				$("#dropID").append(`<div class="dropdown-divider"></div>`);
 				$("#dropID").append(`<a style="cursor:pointer" class="dropdown-item" onClick="adminCartClick()">Admin cart</a>`);
 			} else {
@@ -65,21 +66,7 @@ $(document).on('click', '#signOut', function(){
     	}});
 });
 
-function usersClick() {
-	window.location.href="adminusers.html";
-}
 
-function articlesClick() {
-	window.location.href="adminarticles.html";
-}
-
-function vehiclesClick() {
-	window.location.href="adminvehicles.html";
-}
-
-function restaurantsClick() {
-	window.location.href="adminrestaurants.html";
-}
 
 function loadArticles() {
 	$.ajax({
@@ -91,6 +78,7 @@ function loadArticles() {
     		for(let i = 0; i < data.length; i++){    			
     			$("#articlesTableID").append(`<tr><th>` + data[i].name + `</th>
     			<td>`+ data[i].price +`</td>
+    			<td>`+ data[i].restaurant +`</td>
     			<td>`+ data[i].description +`</td>
     			<td>`+ data[i].quantity +`</td>
     			<td>` + data[i].type + `</td>
@@ -271,7 +259,7 @@ $(document).on('change', '.quant', function(){
 	console.log(q);	
 	$.ajax({
 		type: 'POST',
-		url: orders_url + "/changequantity/" + id + "/" + q,
+		url: "../Project/webapi/orders/changequantity/" + id + "/" + q,
 		success: function() {
 			$.ajax({
 				type : 'GET',
@@ -299,7 +287,7 @@ function order() {
 	var veh = $("#vehicles").val();
 	$.ajax({
 		type : 'POST',
-		url : orders_url + "/createadminorder/" + veh,
+		url : "../Project/webapi/orders/createadminorder/" + veh,
     contentType : 'application/json',
 		dataType : "json",
     data:orderToJSON(),

@@ -16,6 +16,7 @@ import javax.ws.rs.core.Response;
 import models.Restaurant;
 import models.User;
 import models.UserRole;
+import services.ArticleService;
 import services.UserService;
 
 @Path("/users")
@@ -24,6 +25,7 @@ import services.UserService;
 public class UserResource {
 	
 	private UserService userService = new UserService();
+	private ArticleService articleService = new ArticleService();
 	
 	/*@POST
 	public User addUser(User user){
@@ -43,7 +45,7 @@ public class UserResource {
 	@Path("/login")
 	public Response loginUser(User user,@Context HttpServletRequest request) {		
 		User tempUser =  userService.loginUser(user);
-		
+		articleService.getArticlesByPopularity(); 
 		if(tempUser == null) {
 			return Response.status(Response.Status.NOT_FOUND).build();
 		}
