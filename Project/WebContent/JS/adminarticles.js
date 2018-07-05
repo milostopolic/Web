@@ -1,6 +1,9 @@
 var articles_url = "../Project/webapi/articles"
 var loggeduser_url = "../Project/webapi/users/loggeduser"
 var logout_url = "../Project/webapi/users/logout"
+var ordersCart_url = "../Project/webapi/orders/cart"
+var loggedUser
+var orders_url = "../Project/webapi/orders"
 
 function formToJSON() {
 	return JSON.stringify({	
@@ -16,6 +19,7 @@ function loadNavbar() {
     contentType : 'application/json',
 		
 		success : function(data) {
+			loggedUser = data;
 			console.log(data.role);
 			$("#navbarTogglerDemo03").empty();
 			$("#navbarTogglerDemo03").append(`<ul class="navbar-nav ml-auto mt-2 mt-lg-0"  id="listaID">			      
@@ -36,6 +40,8 @@ function loadNavbar() {
 				$("#dropID").append(`<a style="cursor:pointer" class="dropdown-item" onClick="articlesClick()">Articles</a>`);
 				$("#dropID").append(`<a style="cursor:pointer" class="dropdown-item" onClick="vehiclesClick()">Vehicles</a>`);
 				$("#dropID").append(`<a style="cursor:pointer" class="dropdown-item" onClick="restaurantsClick()">Restaurants</a>`);
+				$("#dropID").append(`<div class="dropdown-divider"></div>`);
+				$("#dropID").append(`<a style="cursor:pointer" class="dropdown-item" onClick="adminCartClick()">Admin cart</a>`);
 			} else {
 				$("#dropID").append(`<a class="dropdown-item" href="#">User page</a>`);
 			}
@@ -89,10 +95,13 @@ function loadArticles() {
     			<td>`+ data[i].quantity +`</td>
     			<td>` + data[i].type + `</td>
     			<td>
-    <img class="editovanje" id="`+ data[i].name +`" style="margin-left:5px; cursor:pointer" height="24" witdh="24" src="images/edit.png" alt="appropriate alternative text goes here">
+    <img class="editovanje" id="`+ data[i].name +`" style="margin-left:5px; cursor:pointer" height="24" width="24" src="images/edit.png" alt="appropriate alternative text goes here">
     				</td>
     			<td>
-    <img class="brisanje" id="` + data[i].name + `" style="margin-left:5px; cursor:pointer" height="24" witdh="24" src="images/delete.png" alt="appropriate alternative text goes here">
+    <img class="brisanje" id="` + data[i].name + `" style="margin-left:5px; cursor:pointer" height="24" width="24" src="images/delete.png" alt="appropriate alternative text goes here">
+    			</td>
+    			<td>
+    <img class="dodavanje" id="` + data[i].name + `" style="margin-left:5px; cursor:pointer" height="24" width="24" src="images/cart.png" alt="appropriate alternative text goes here">
     			</td></tr>`);
     			//$('#'+data[i].name+' option:contains('+data[i].type+')').prop('selected',true);    			
     		}
@@ -134,6 +143,206 @@ $(document).on('click', '.brisanje', function() {
 		success: function() {
 			toastr.success("Article deleted.");
 			loadArticles();
+		},
+		error:function() {}
+	})
+});
+
+$(document).on('click', '.dodavanje', function() {
+	var id = $(this).attr("id");
+	$.ajax({
+		type : 'POST',
+		url : ordersCart_url,
+    contentType : 'application/json',
+    data:JSON.stringify({	
+        "article":id,
+        /*"restaurant": sessionStorage.getItem('restaurantDetails')   */
+    	}),
+    
+		success : function(data) {
+			toastr.success("Added to cart.");
+			loadNavbar()
+			
+		},
+		error : function(XMLHttpRequest, textStatus, errorThrown) {
+			toastr.warn("Already added to cart.");
+		}
+	});
+});
+
+function adminCartClick() {
+	$('#exampleModal').modal('toggle');
+	loadCartData();
+}
+
+function loadCartData() {
+	loadCart();
+	$.ajax({
+		type: 'GET',
+		url: "../Project/webapi/users",
+		contentType : 'application/json',
+		success: function(data) {
+			for(let us of data) {
+				if(us.role == 'CUSTOMER') {
+					$("#buyer").append(`<option value="`+us.username+`">`+us.username+`</option>`);
+				}
+				if(us.role == 'DELIVERY') {
+					if(us.vehicle == '')
+						$("#deliverer").append(`<option value="`+us.username+`">`+us.username+`</option>`);
+				}
+			}
+			
+			$.ajax({
+				type: 'GET',
+				url: "../Project/webapi/vehicles/freevehicles",
+				contentType : 'application/json',
+				success: function(data) {
+					for(let veh of data) {
+						$("#vehicles").append(`<option value="`+veh.model+`">`+veh.maker + ` `+ veh.model +`</option>`);
+					}
+					
+				},
+				error: function() {}
+				
+			});
+		},
+		error: function() {
+			
+		}
+	});
+}
+
+function loadCart(){
+	$("#modal-body").empty();
+	$("#modal-footer").empty();
+	if(loggedUser.cart.items.length > 0) {
+		$("#modal-body").append(`<table class="table">
+		  <thead class="thead-light">
+		    <tr>
+		      <th scope="col">Article</th>
+		      <th scope="col">Unit price</th>
+		      <th scope="col">Quantity</th>
+		      <th scope="col"></th>
+		    </tr>
+		  </thead>
+		  <tbody id="cartTable">
+		    
+		  </tbody>
+		</table>`);
+		for(let i = 0; i < loggedUser.cart.items.length; i++) {
+			$("#cartTable").append(`<tr>
+			<th>`+ loggedUser.cart.items[i].article +`</th><td>`+ loggedUser.cart.items[i].price +`</td>
+			<td><input style="max-width:50px" class="quant" id="` +loggedUser.cart.items[i].article + `" onkeydown="return false" min="1" max="10" type="number" value="`+loggedUser.cart.items[i].quantity +`"></td>
+			<td><img class="brisanjeCart" id="` +loggedUser.cart.items[i].article + `" style="margin-left:5px; cursor:pointer" height="24" witdh="24" src="images/delete.png" alt="appropriate alternative text goes here"></td>
+			</tr>`);
+		}
+		$("#modal-body").append(`<p>Total price: `+ loggedUser.cart.totalPrice +`</p>`);
+		$("#modal-body").append(`<div class="form-group row">
+				  <label for="buyer" class="col-2 col-form-label">Buyer</label>
+				  <div class="col-10">
+				    <select class="form-control" id="buyer">
+				  </div>
+				</div>`);
+		$("#modal-body").append(`<div class="form-group row">
+				  <label for="deliverer" class="col-2 col-form-label">Deliverer</label>
+				  <div class="col-10">
+				    <select class="form-control" id="deliverer">
+				  </div>
+				</div>`);
+		$("#modal-body").append(`<div class="form-group row">
+				  <label for="vehicles" class="col-2 col-form-label">Vehicle</label>
+				  <div class="col-10">
+				    <select class="form-control" id="vehicles">
+				  </div>
+				</div>`);
+		$("#modal-footer").append(`<input id="note" class="form-control mr-sm-2" type="text" placeholder="Note"/>`);
+		$("#modal-footer").append(`<button onclick="order()" class="btn btn-success">Order</button>`);
+		
+	} else {
+		$("#modal-body").append(`<p>Your cart is empty.</p>`);
+	}
+	
+	
+}
+
+$(document).on('change', '.quant', function(){
+	var id = ($(this).attr('id'));
+	var q = ($(this).val());
+	console.log(q);	
+	$.ajax({
+		type: 'POST',
+		url: orders_url + "/changequantity/" + id + "/" + q,
+		success: function() {
+			$.ajax({
+				type : 'GET',
+				url : loggeduser_url,
+		    contentType : 'application/json',
+		    
+				success : function(data) {
+					loggedUser = data;
+					loadCartData();
+				},
+				error: function() {
+					
+				}
+			});
+			
+		},
+		error:function(){
+			
+		}
+	})
+	
+});
+
+function order() {
+	var veh = $("#vehicles").val();
+	$.ajax({
+		type : 'POST',
+		url : orders_url + "/createadminorder/" + veh,
+    contentType : 'application/json',
+		dataType : "json",
+    data:orderToJSON(),
+		success : function(data) {
+			toastr.success("Order placed.");
+			loadNavbar();
+			$('#exampleModal').modal('toggle');
+		},
+		error : function(XMLHttpRequest, textStatus, errorThrown) {
+		}
+	});
+};
+
+function orderToJSON() {
+	return JSON.stringify({	
+    "buyer" : $("#buyer").val(),
+    "deliverer" : $("#deliverer").val(),
+	"note":$('#note').val(),
+    "items":loggedUser.cart.items,
+    "totalPrice":loggedUser.cart.totalPrice
+	});
+}
+
+$(document).on('click', '.brisanjeCart', function() {
+	var id = ($(this).attr('id'));	
+	$.ajax({
+		type: 'DELETE',
+		url : "../Project/webapi/orders/deleteitem/"+id,
+		contentType : 'application/json',
+		success: function() {
+			$.ajax({
+				type : 'GET',
+				url : loggeduser_url,
+		    contentType : 'application/json',
+		    
+				success : function(data) {
+					loggedUser = data;
+					loadCart();
+				},
+				error: function() {
+					
+				}
+			});
 		},
 		error:function() {}
 	})

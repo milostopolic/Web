@@ -179,5 +179,35 @@ public class OrderResource {
 		}
 		return Response.status(Response.Status.BAD_REQUEST).build();
 	}
+	
+	@POST
+	@Path("/createadminorder/{veh}")
+	public Response createAdminOrder(@Context HttpServletRequest request, Order order, @PathParam("veh") String veh) {
+		User tempUser = (User) request.getSession().getAttribute("loggedUser");
+		if(tempUser != null) {
+			Order tempOrder = orderService.createAdminOrder(tempUser, order, veh);
+			if(tempOrder == null) {
+				return Response.status(Response.Status.BAD_REQUEST).build();
+			} else {
+				return Response.ok(tempOrder, MediaType.APPLICATION_JSON).build();
+			}
+		}
+		return Response.status(Response.Status.BAD_REQUEST).build();
+	}
+	
+	@DELETE
+	@Path("/{id}")
+	public Response deleteOrder(@Context HttpServletRequest request, @PathParam("id") int id) {
+		User tempUser = (User) request.getSession().getAttribute("loggedUser");
+		if(tempUser != null) {
+			Order tempOrder = orderService.deleteOrder(id);
+			if(tempOrder == null) {
+				return Response.status(Response.Status.BAD_REQUEST).build();
+			} else {
+				return Response.ok(tempOrder, MediaType.APPLICATION_JSON).build();
+			}
+		}
+		return Response.status(Response.Status.BAD_REQUEST).build();
+	}
 
 }

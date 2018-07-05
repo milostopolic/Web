@@ -66,6 +66,7 @@ function loadNavbar() {
 				$("#dropID").append(`<a style="cursor:pointer" class="dropdown-item" onClick="articlesClick()">Articles</a>`);
 				$("#dropID").append(`<a style="cursor:pointer" class="dropdown-item" onClick="vehiclesClick()">Vehicles</a>`);
 				$("#dropID").append(`<a style="cursor:pointer" class="dropdown-item" onClick="restaurantsClick()">Restaurants</a>`);
+				$("#dropID").append(`<a style="cursor:pointer" class="dropdown-item" onClick="ordersClick()">Orders</a>`);
 				
 			} else if(data.role == 'CUSTOMER') {
 				$("#dropID").append(`<a class="dropdown-item" href="userpage.html">User page</a>`);
@@ -140,6 +141,10 @@ function vehiclesClick() {
 }
 function restaurantsClick() {
 	window.location.href="adminrestaurants.html";
+}
+
+function ordersClick() {
+	window.location.href="adminorders.html";
 }
 
 function loadRestaurants(category) {

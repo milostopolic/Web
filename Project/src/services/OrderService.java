@@ -22,6 +22,7 @@ public class OrderService {
 	private Map<Integer, Order> orders = DatabaseClass.getOrders();
 	private Map<String, Article> articles = DatabaseClass.getArticles();
 	private Map<String, Vehicle> vehicles = DatabaseClass.getVehicles();
+	private Map<String, User> users = DatabaseClass.getUsers();
 	
 	public OrderItem addToCart(OrderItem ordIt, User user) {
 		boolean flag = false;
@@ -118,7 +119,12 @@ public class OrderService {
 	}
 	
 	public List<Order> getAllOrders() {
-		return new ArrayList<Order>(orders.values());
+		List<Order> tempOrders = new ArrayList<>();
+		for(Order ord : orders.values()) {
+			if(!ord.isDeleted())
+				tempOrders.add(ord);
+		}
+		return tempOrders;
 	}
 	
 	public List<Order> getOrdersByUser(User user) {
@@ -193,6 +199,46 @@ public class OrderService {
 		user.setActiveOrder(-1);
 		user.setVehicle("");
 		
+		return tempOrder;
+	}
+	
+	public Order createAdminOrder(User user, Order order, String veh) {
+		if(user.getRole() != UserRole.ADMIN)
+			return null;
+		
+		users.get(order.getDeliverer()).setVehicle(veh);
+		vehicles.get(veh).setUsed(true);
+		
+		order.setStatus(OrderStatus.BEINGDELIVERED);
+		order.setDateTime(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date()));
+		order.setId(Repository.getInstance().getOrders().size());
+		
+		users.get(order.getDeliverer()).setActiveOrder(order.getId());
+		
+		Repository.getInstance().getOrders().put(order.getId(), order);
+		
+		user.setCart(new Cart());
+		
+		DatabaseClass.saveData(DatabaseClass.myRepositoryPath);
+		return order;
+		
+	}
+	
+	public Order deleteOrder(int id){
+		if(!orders.containsKey(id))
+			return null;
+		
+		Order tempOrder = orders.get(id);
+		if(tempOrder.getStatus() == OrderStatus.BEINGDELIVERED) {
+			User tempUser = users.get(tempOrder.getDeliverer());
+			Vehicle tempVehicle = vehicles.get(tempUser.getVehicle());
+			
+			tempVehicle.setUsed(false);
+			tempUser.setActiveOrder(-1);
+			tempUser.setVehicle("");
+		}
+		
+		tempOrder.setDeleted(true);
 		return tempOrder;
 	}
 

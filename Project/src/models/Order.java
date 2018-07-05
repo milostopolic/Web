@@ -18,9 +18,10 @@ public class Order implements Serializable{
 	private String note;
 	private float totalPrice;
 	private int id;
+	private boolean deleted;
 	
 	public Order() {
-		
+		this.deleted = false;
 	}
 
 	public Order(Article item, String dateTime, User buyer, User deliverer, String note) {
@@ -90,6 +91,14 @@ public class Order implements Serializable{
 
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	public boolean isDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
 	}
 
 	
