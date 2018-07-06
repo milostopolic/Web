@@ -245,16 +245,42 @@ function loadCart(){
 			<td><img class="brisanje" id="` +loggedUser.cart.items[i].article + `" style="margin-left:5px; cursor:pointer" height="24" witdh="24" src="images/delete.png" alt="appropriate alternative text goes here"></td>
 			</tr>`);
 		}
-		$("#modal-body").append(`<p>Total price: `+ loggedUser.cart.totalPrice +`</p>`);
+		$("#modal-body").append(`<p>Total price: `+ loggedUser.cart.tempPrice +`</p>`);
+		$("#modal-body").append(`<div class="form-group row">
+				  <label for="bonus" class="col-6 col-form-label float-right">Use bonus points: </label>
+				  <div class="col-4">
+				    <input onkeydown="return false" value="`+loggedUser.cart.usedBonus+`" min="0" max="`+loggedUser.bonus+`" type="number" class="form-control float-right quantBonus" id="bonus">
+				  </div>
+				  <div class="col-2"><button class="btn btn-success" id="applyBonus">Apply</button></div>
+				</div>`);
 		$("#modal-footer").append(`<input id="note" class="form-control mr-sm-2" type="text" placeholder="Note"/>`);
 		$("#modal-footer").append(`<button onclick="order()" class="btn btn-success">Order</button>`);
-		
+		if(loggedUser.cart.usedBonus > 0) {
+			$("#applyBonus").prop("disabled",true);
+		}
 	} else {
 		$("#modal-body").append(`<p>Your cart is empty.</p>`);
 	}
 	
 	
 }
+
+$(document).on('click', '#applyBonus', function(){	
+	var q = ($("#bonus").val());
+	console.log(q);	
+	$.ajax({
+		type: 'POST',
+		url: orders_url + "/changebonus/" + q,
+		success: function(data) {
+			loggedUser = data;
+			loadCart();
+		},
+		error:function(){
+			
+		}
+	})
+	
+});
 
 
 
@@ -289,7 +315,7 @@ $(document).on('change', '.quant', function(){
 	console.log(q);	
 	$.ajax({
 		type: 'POST',
-		url: orders_url + "changequantity/" + id + "/" + q,
+		url: orders_url + "/changequantity/" + id + "/" + q,
 		success: function() {
 			$.ajax({
 				type : 'GET',
@@ -332,8 +358,9 @@ function order() {
 
 function orderToJSON() {
 	return JSON.stringify({	
-    "note":$('#note').val(),
-    "items":loggedUser.cart.items,
-    "totalPrice":loggedUser.cart.totalPrice
+		"note":$('#note').val(),
+	    "items":loggedUser.cart.items,
+	    "totalPrice":loggedUser.cart.tempPrice,
+	    "usedBonus" : $('#bonus').val()
 	});
 }

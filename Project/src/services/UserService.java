@@ -38,7 +38,9 @@ public class UserService {
 	
 	public User loginUser(User user) {
 		if(users.containsKey(user.getUsername())) {
-			return users.get(user.getUsername());
+			if(users.get(user.getUsername()).getPassword().equals(user.getPassword())) {
+				return users.get(user.getUsername());
+			}			
 		}		
 		return null;
 	}
