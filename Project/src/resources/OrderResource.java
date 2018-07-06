@@ -66,6 +66,21 @@ public class OrderResource {
 		return Response.status(Response.Status.BAD_REQUEST).build();
 	}
 	
+	@POST
+	@Path("/changebonus/{q}")
+	public Response changeBonus(@Context HttpServletRequest request, @PathParam("q") int q) {
+		User tempUser = (User) request.getSession().getAttribute("loggedUser");
+		if(tempUser != null) {
+			tempUser = orderService.changeBonus(q, tempUser);
+			if(tempUser == null) {
+				return Response.status(Response.Status.BAD_REQUEST).build();
+			} else {
+				return Response.ok(tempUser, MediaType.APPLICATION_JSON).build();
+			}
+		}
+		return Response.status(Response.Status.BAD_REQUEST).build();
+	}
+	
 	@DELETE
 	@Path("/deleteitem/{id}")
 	public Response deleteItem(@Context HttpServletRequest request, @PathParam("id") String id) {

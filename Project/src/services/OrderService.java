@@ -39,6 +39,8 @@ public class OrderService {
 			if(flag) {
 				user.getCart().getItems().get(tempI).setQuantity(user.getCart().getItems().get(tempI).getQuantity() + 1);
 				user.getCart().setTotalPrice(updateTotalPrice(user.getCart()));
+				user.getCart().setTempPrice(user.getCart().getTotalPrice());
+				user.getCart().setUsedBonus(0);
 				DatabaseClass.saveData(DatabaseClass.myRepositoryPath);
 				return user.getCart().getItems().get(tempI);
 			} else {
@@ -50,6 +52,8 @@ public class OrderService {
 				ordIt.setRestaurant(articles.get(ordIt.getArticle()).getRestaurant());
 				user.getCart().getItems().add(ordIt);
 				user.getCart().setTotalPrice(updateTotalPrice(user.getCart()));
+				user.getCart().setTempPrice(user.getCart().getTotalPrice());
+				user.getCart().setUsedBonus(0);
 				DatabaseClass.saveData(DatabaseClass.myRepositoryPath);
 				return ordIt;
 			}
@@ -61,7 +65,7 @@ public class OrderService {
 		float tempPrice = 0;
 		for(int i = 0; i < cart.getItems().size(); i++) {
 			tempPrice += cart.getItems().get(i).getPrice() * cart.getItems().get(i).getQuantity();
-		}
+		}		
 		
 		return tempPrice;
 	}
@@ -81,9 +85,22 @@ public class OrderService {
 			OrderItem oi = user.getCart().getItems().get(tempI);
 			oi.setQuantity(quantity);
 			user.getCart().setTotalPrice(updateTotalPrice(user.getCart()));
+			user.getCart().setTempPrice(user.getCart().getTotalPrice());
+			user.getCart().setUsedBonus(0);
 			DatabaseClass.saveData(DatabaseClass.myRepositoryPath);
 			return oi;
 		}
+	}
+	
+	public User changeBonus(int bonus,User user) {		
+		Cart tempCart = user.getCart();
+		tempCart.setUsedBonus(bonus);
+		if(bonus != 0) {			
+			tempCart.setTempPrice(tempCart.getTotalPrice() - (tempCart.getTotalPrice() * 0.03f * bonus));			
+		}
+		DatabaseClass.saveData(DatabaseClass.myRepositoryPath);
+		
+		return user;		
 	}
 	
 	public OrderItem deleteItem(String id, User user) {
@@ -100,6 +117,8 @@ public class OrderService {
 		} else {
 			OrderItem oi = user.getCart().getItems().remove(tempI);
 			user.getCart().setTotalPrice(updateTotalPrice(user.getCart()));
+			user.getCart().setTempPrice(user.getCart().getTotalPrice());
+			user.getCart().setUsedBonus(0);
 			DatabaseClass.saveData(DatabaseClass.myRepositoryPath);
 			return oi;
 		}
@@ -115,6 +134,9 @@ public class OrderService {
 			Article tempArticle = articles.get(oi.getArticle());
 			tempArticle.setPopularity(tempArticle.getPopularity() + 1);
 		}
+		
+		user.setBonus(user.getBonus() - order.getUsedBonus());
+		
 		Repository.getInstance().getOrders().put(order.getId(), order);
 		
 		user.setCart(new Cart());
@@ -195,10 +217,23 @@ public class OrderService {
 		if(user.getRole() != UserRole.DELIVERY)
 			return null;
 		if(!orders.containsKey(user.getActiveOrder()))
-			return null;
+			return null;		
 		
 		Order tempOrder = orders.get(user.getActiveOrder());
-		tempOrder.setStatus(OrderStatus.DELIVERED);
+		tempOrder.setStatus(OrderStatus.DELIVERED);		
+		
+		User tempBuyer = users.get(tempOrder.getBuyer());
+		
+		/*if(tempOrder.getUsedBonus() > 0) {
+			tempBuyer.setBonus(tempBuyer.getBonus() - tempOrder.getUsedBonus());
+		} else {*/
+			if(tempOrder.getTotalPrice() >= 500) {
+				if(tempBuyer.getBonus() < 10) {
+					tempBuyer.setBonus(tempBuyer.getBonus() + 1);
+				}
+			}
+		//}		
+		
 		Vehicle tempVehicle = vehicles.get(user.getVehicle());
 		tempVehicle.setUsed(false);
 		user.setActiveOrder(-1);
@@ -236,14 +271,23 @@ public class OrderService {
 		Order tempOrder = orders.get(id);
 		if(tempOrder.getStatus() == OrderStatus.BEINGDELIVERED) {
 			User tempUser = users.get(tempOrder.getDeliverer());
-			Vehicle tempVehicle = vehicles.get(tempUser.getVehicle());
+			Vehicle tempVehicle = vehicles.get(tempUser.getVehicle());			
+			if(tempOrder.getUsedBonus() > 0) {
+				User tempBuyer = users.get(tempOrder.getBuyer());
+				tempBuyer.setBonus(tempBuyer.getBonus() + tempOrder.getUsedBonus());
+			}
 			
 			tempVehicle.setUsed(false);
 			tempUser.setActiveOrder(-1);
 			tempUser.setVehicle("");
-		}
-		
+		} else if(tempOrder.getStatus() != OrderStatus.DELIVERED) {
+			if(tempOrder.getUsedBonus() > 0) {
+				User tempBuyer = users.get(tempOrder.getBuyer());
+				tempBuyer.setBonus(tempBuyer.getBonus() + tempOrder.getUsedBonus());
+			}
+		}		
 		tempOrder.setDeleted(true);
+		DatabaseClass.saveData(DatabaseClass.myRepositoryPath);
 		return tempOrder;
 	}
 

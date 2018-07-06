@@ -20,8 +20,11 @@ public class Order implements Serializable{
 	private int id;
 	private boolean deleted;
 	
+	private int usedBonus;
+	
 	public Order() {
 		this.deleted = false;
+		this.usedBonus = 0;
 	}
 
 	public Order(Article item, String dateTime, User buyer, User deliverer, String note) {
@@ -99,6 +102,14 @@ public class Order implements Serializable{
 
 	public void setDeleted(boolean deleted) {
 		this.deleted = deleted;
+	}
+
+	public int getUsedBonus() {
+		return usedBonus;
+	}
+
+	public void setUsedBonus(int usedBonus) {
+		this.usedBonus = usedBonus;
 	}
 
 	

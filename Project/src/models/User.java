@@ -24,6 +24,8 @@ public class User implements Serializable{
 	private String vehicle;
 	private int activeOrder;
 	
+	private int bonus;
+	
 	/*public User(String username, String password, String name, String surname) {
 		super();
 		this.username = username;
@@ -50,6 +52,7 @@ public class User implements Serializable{
 		this.orders = new ArrayList<>();
 		this.vehicle = "";
 		this.activeOrder = -1;
+		this.bonus = 0;
 	}
 
 	public String getUsername() {
@@ -154,6 +157,14 @@ public class User implements Serializable{
 
 	public void setActiveOrder(int activeOrder) {
 		this.activeOrder = activeOrder;
+	}
+
+	public int getBonus() {
+		return bonus;
+	}
+
+	public void setBonus(int bonus) {
+		this.bonus = bonus;
 	}
 	
 	

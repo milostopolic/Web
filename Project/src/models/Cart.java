@@ -13,9 +13,12 @@ public class Cart implements Serializable{
 	private List<OrderItem> items;
 	private String note;
 	private float totalPrice;
+	private int usedBonus;
+	private float tempPrice;
 	
 	public Cart() {
 		this.items = new ArrayList<>();
+		this.usedBonus = 0;
 	}
 
 	public List<OrderItem> getItems() {
@@ -40,6 +43,22 @@ public class Cart implements Serializable{
 
 	public void setTotalPrice(float totalPrice) {
 		this.totalPrice = totalPrice;
+	}
+
+	public int getUsedBonus() {
+		return usedBonus;
+	}
+
+	public void setUsedBonus(int usedBonus) {
+		this.usedBonus = usedBonus;
+	}
+
+	public float getTempPrice() {
+		return tempPrice;
+	}
+
+	public void setTempPrice(float tempPrice) {
+		this.tempPrice = tempPrice;
 	}
 	
 	
